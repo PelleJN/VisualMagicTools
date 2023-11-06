@@ -1,0 +1,306 @@
+#! C:/Program Files/Nuke15.0v1/nuke-15.0.1.dll -nx
+version 15.0 v1
+Gizmo {
+ addUserKnob {20 User}
+ addUserKnob {41 analyze l "Analyze Noise" T Denoise1.analyze}
+ addUserKnob {41 amount l "Denoise Amount" T Denoise1.amount}
+ addUserKnob {41 highAmount l "High Freq Removal" T Denoise1.highAmount}
+ addUserKnob {41 mix l "Noise Cut" T Merge6out.mix}
+ addUserKnob {26 ""}
+ addUserKnob {20 Frameblending_1 l "Temporal Processing (Noiseblending)" n 1}
+ addUserKnob {41 frame_blending l "Blending Strength" T Denoise1.frame_blending}
+ addUserKnob {41 frames l "Frame Amount" T Denoise1.frames}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {26 ""}
+ addUserKnob {20 Details l "Reapply Details" t "Ad detail back to the denoised clip" n 1}
+ addUserKnob {26 Info l <b>OBS:</b> T "This will reintroduce some noise"}
+ addUserKnob {41 DetailReAdd l "Fine detail" T Merge7.mix}
+ addUserKnob {41 amount_1 l Sharpen T Sharpen2.amount}
+ addUserKnob {26 ""}
+ addUserKnob {20 endGroup_1 n -1}
+ addUserKnob {20 TempMedian_1 l "Temporal Median" n 1}
+ addUserKnob {26 TempMedianInfo l "" +STARTLINE T "<b>OBS:</b> <u>Will cause ghosting on fast moving images.</u><br><br><I>It outputs each pixel by calculating the median of the current frame,<br> the frame before, and the frame after.</i>"}
+ addUserKnob {41 TempMedian l Strenght T TemporalMedian1.core}
+ addUserKnob {20 endGroup_2 n -1}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x8e388e00
+  label "Add detail back"
+  note_font_size 20
+  xpos 327
+  ypos -102
+  bdwidth 174
+  bdheight 658
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0xaaaaaa00
+  label "Actual denoising "
+  note_font_size 20
+  xpos 575
+  ypos -339
+  bdwidth 171
+  bdheight 217
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode3
+  tile_color 0x7171c600
+  label "High and lowpass"
+  note_font_size 20
+  xpos 612
+  ypos -45
+  bdwidth 474
+  bdheight 503
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode4
+  tile_color 0x388e8e00
+  label "Exta filtering"
+  note_font_size 20
+  xpos 549
+  ypos 565
+  bdwidth 406
+  bdheight 326
+ }
+ Input {
+  inputs 0
+  name Inputfootage
+  xpos 621
+  ypos -406
+ }
+ Dot {
+  name Dot2
+  xpos 655
+  ypos -366
+ }
+set Ncedb1000 [stack 0]
+ VectorGenerator {
+  motionEstimation Regularized
+  vectorDetailReg 1
+  name VectorGenerator1
+  xpos 621
+  ypos -251
+ }
+ Denoise2 {
+  amount 4
+  preserve_edges true
+  enable_temporal true
+  frame_blending 9.5
+  frames 4.05
+  "Noise Analysis" 1
+  analysisRegion {5 -6 82 72}
+  analysisFrame 6
+  "Tune Frequencies" 1
+  mediumAmount 4.9
+  lowAmount 5.2
+  processVeryLow true
+  veryLowAmount 2.25
+  needsAnalyzing false
+  profileCurve {profile {curve 0 x0.125 0 0 0 0 0 0 0 0}}
+  serializeKnob "6.032412499e-02 4.834497571e-01 5.193272829e-01
+7.376958383e-04 5.521272542e-04 5.498296232e-04
+7.376958383e-04 5.521272542e-04 5.498296232e-04
+5.469847820e-04 2.707774402e-04 3.226717818e-04
+0.000000000e+00 0.000000000e+00 0.000000000e+00
+3.596623428e-04 4.883250804e-04 3.565674415e-04
+3.596623428e-04 4.883250804e-04 3.565674415e-04
+2.652610128e-04 2.973826486e-04 2.396446944e-04
+0.000000000e+00 0.000000000e+00 0.000000000e+00
+1.769140072e-04 3.172433935e-04 2.076662931e-04
+1.769140072e-04 3.172433935e-04 2.076662931e-04
+1.250629139e-04 2.007040748e-04 1.395353029e-04
+0.000000000e+00 0.000000000e+00 0.000000000e+00
+9.253511234e-05 1.708502678e-04 1.029494597e-04
+9.253511234e-05 1.708502678e-04 1.029494597e-04
+6.192239380e-05 1.083643801e-04 7.513492892e-05
+0.000000000e+00 0.000000000e+00 0.000000000e+00 0.000000000e+00 0.000000000e+00 0.000000000e+00 0.000000000e+00 0.000000000e+00 0.000000000e+00 
+13460396083052693013"
+  name Denoise1
+  xpos 621
+  ypos -177
+ }
+ Dot {
+  name Dot1
+  xpos 655
+  ypos 11
+ }
+set Ncedb1c00 [stack 0]
+ Dot {
+  name Dot18
+  xpos 482
+  ypos 11
+ }
+set Nac890000 [stack 0]
+ Dot {
+  name Dot19
+  xpos 482
+  ypos 119
+ }
+push $Nac890000
+ Dot {
+  name Dot14
+  xpos 371
+  ypos 10
+ }
+ Blur {
+  size 7
+  name Blur3
+  xpos 337
+  ypos 31
+ }
+ Merge2 {
+  inputs 2
+  operation divide
+  name Merge8
+  xpos 337
+  ypos 116
+ }
+ Sharpen {
+  amount 0.97
+  name Sharpen1
+  xpos 337
+  ypos 184
+ }
+ Dot {
+  name Dot16
+  xpos 371
+  ypos 499
+ }
+push $Ncedb1000
+ Dot {
+  name Dot17
+  xpos 1018
+  ypos -366
+ }
+ Blur {
+  size 30.5
+  name Blur1
+  xpos 984
+ }
+ set Cac8c6000 [stack 0]
+ TemporalMedian {
+  core 0
+  name TemporalMedian1
+  xpos 986
+  ypos 276
+ }
+ set Cac8c6400 [stack 0]
+ Dot {
+  name Dot8
+  xpos 1018
+  ypos 417
+ }
+push $Ncedb1c00
+push $Ncedb1c00
+clone $Cac8c6000 {
+  xpos 870
+  ypos 2
+  selected false
+ }
+ Dot {
+  name Dot7
+  xpos 904
+  ypos 129
+ }
+ Merge2 {
+  inputs 2
+  operation divide
+  name Merge3
+  xpos 621
+  ypos 126
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge4
+  xpos 621
+  ypos 414
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  name Merge7
+  xpos 621
+  ypos 496
+ }
+set Nac900000 [stack 0]
+ Sharpen {
+  amount 0
+  size 4.4
+  name Sharpen2
+  xpos 621
+  ypos 547
+ }
+ Dot {
+  name Dot11
+  xpos 655
+  ypos 678
+ }
+set Nac900400 [stack 0]
+ Blur {
+  size 2.8
+  name Blur2
+  xpos 865
+  ypos 669
+ }
+ Dot {
+  name Dot12
+  xpos 899
+  ypos 799
+ }
+push $Nac900400
+ Dot {
+  name Dot9
+  xpos 655
+  ypos 733
+ }
+set Nac901000 [stack 0]
+ Dot {
+  name Dot10
+  xpos 799
+  ypos 733
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  name Merge5
+  xpos 765
+  ypos 796
+ }
+ Dot {
+  name Dot13
+  xpos 799
+  ypos 912
+ }
+push $Nac901000
+ Merge2 {
+  inputs 2
+  operation from
+  name Merge6out
+  xpos 621
+  ypos 909
+ }
+clone $Cac8c6400 {
+  xpos 622
+  ypos 963
+  selected false
+ }
+ Output {
+  name Output1
+  xpos 621
+  ypos 1337
+ }
+push $Nac900000
+ Viewer {
+  frame_range 1-20
+  monitorOutOutputTransform rec709
+  name Viewer1
+  xpos 450
+  ypos 608
+ }
+end_group

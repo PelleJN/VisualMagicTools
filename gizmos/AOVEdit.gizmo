@@ -1,0 +1,245 @@
+#! C:/Program Files/Nuke15.0v1/nuke-15.0.1.dll -nx
+version 15.0 v1
+Gizmo {
+ tile_color 0x55bfffff
+ label "\[value selectedaov]"
+ addUserKnob {20 edits l Edits}
+ addUserKnob {41 selectedaov l "Selected AOV" t "The AOV to grade" T GetAOV.in1}
+ addUserKnob {26 ""}
+ addUserKnob {41 blackpoint T Grade1.blackpoint}
+ addUserKnob {41 whitepoint T Grade1.whitepoint}
+ addUserKnob {41 black l lift T Grade1.black}
+ addUserKnob {41 white l gain T Grade1.white}
+ addUserKnob {41 multiply T Grade1.multiply}
+ addUserKnob {41 add l offset T Grade1.add}
+ addUserKnob {41 gamma T Grade1.gamma}
+ addUserKnob {26 ""}
+ addUserKnob {41 mix T Grade1.mix}
+ addUserKnob {41 preview1 l "View AOV" T Switch1.disable}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 infotext l "" +STARTLINE T "<font size=\"6\"><b>AOVEdit</b></font><br>\n<i>v0.0.1</i> <br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\nThe goal of this node is to be a one-stop-shop for your AOV grading needs,<br> letting you add any number of AOVs and grade them indivudually in one node.<br> (if that's even possible idk tbh)"}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x666666ff
+  gl_color 0x666666ff
+  label AOV
+  note_font_size 42
+  xpos -692
+  ypos -330
+  bdwidth 448
+  bdheight 1065
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos -361
+  ypos -368
+ }
+ Dot {
+  name Dot1
+  xpos -327
+  ypos -250
+ }
+set N45a2ec00 [stack 0]
+ Dot {
+  name Dot2
+  xpos -541
+  ypos -250
+ }
+set N45a2f000 [stack 0]
+ Dot {
+  name Dot5
+  xpos -639
+  ypos -250
+ }
+ Dot {
+  name Dot12
+  xpos -639
+  ypos -88
+ }
+set N45a2f800 [stack 0]
+ Dot {
+  name Dot6
+  xpos -639
+  ypos 587
+ }
+push $N45a2f800
+push $N45a2f000
+ Shuffle2 {
+  fromInput1 {{0} B}
+  fromInput2 {{0} B}
+  name GetAOV
+  xpos -575
+  ypos -211
+ }
+ Dot {
+  name Dot15
+  xpos -541
+  ypos -158
+ }
+set N45a4c400 [stack 0]
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy2
+  xpos -575
+  ypos -97
+ }
+ Unpremult {
+  name Unpremult1
+  xpos -575
+  ypos -30
+ }
+ Dot {
+  name Dot3
+  xpos -541
+  ypos 28
+ }
+set N45a4d000 [stack 0]
+ Grade {
+  name Grade1
+  xpos -575
+  ypos 72
+ }
+ Dot {
+  name Dot4
+  xpos -541
+  ypos 125
+ }
+set N45a4d800 [stack 0]
+push $N45a4d000
+push $N45a2ec00
+ Unpremult {
+  name Unpremult2
+  xpos -361
+  ypos -28
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  name Merge1
+  xpos -361
+  ypos 25
+ }
+ Merge2 {
+  inputs 2
+  operation plus
+  name Merge2
+  xpos -361
+  ypos 122
+ }
+ Dot {
+  name Dot9
+  xpos -327
+  ypos 189
+ }
+set N45a7e800 [stack 0]
+ Dot {
+  name Dot8
+  xpos -414
+  ypos 189
+ }
+ Dot {
+  name Dot10
+  xpos -414
+  ypos 519
+ }
+push $N45a4c400
+ Dot {
+  name Dot14
+  xpos -455
+  ypos -158
+ }
+ Dot {
+  name Dot13
+  xpos -455
+  ypos 357
+ }
+push $N45a4d800
+ Dot {
+  name Dot7
+  xpos -541
+  ypos 252
+ }
+push $N45a7e800
+ Merge2 {
+  inputs 2
+  operation copy
+  name Merge3
+  xpos -361
+  ypos 249
+ }
+ Premult {
+  name Premult2
+  xpos -361
+  ypos 298
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy3
+  xpos -361
+  ypos 348
+ }
+ Dot {
+  name Dot16
+  xpos -327
+  ypos 418
+ }
+set N45a9ec00 [stack 0]
+ Shuffle2 {
+  fromInput1 {{0} B}
+  out1 {{{GetAOV.in1}}}
+  fromInput2 {{0} B}
+  name ReplaceAOV
+  xpos -361
+  ypos 471
+ }
+ Merge2 {
+  inputs 2
+  operation copy
+  name Merge4
+  xpos -361
+  ypos 516
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy1
+  xpos -361
+  ypos 578
+ }
+ Premult {
+  name Premult1
+  xpos -361
+  ypos 637
+ }
+push $N45a9ec00
+ Dot {
+  name Dot17
+  xpos -454
+  ypos 418
+ }
+ Dot {
+  name Dot11
+  xpos -454
+  ypos 690
+ }
+ Switch {
+  inputs 2
+  which 1
+  name Switch1
+  xpos -361
+  ypos 687
+ }
+ Output {
+  name Output1
+  xpos -361
+  ypos 768
+ }
+end_group
