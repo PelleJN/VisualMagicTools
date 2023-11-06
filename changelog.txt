@@ -1,3 +1,6 @@
+v0.0.2
+ - Added DotGrid v1.0.0
+
 v0.0.1
  - Added basic functionality
  - Added AOVEdit v0.0.1

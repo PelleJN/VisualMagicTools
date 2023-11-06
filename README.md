@@ -7,6 +7,7 @@ Then add nuke.pluginAddPath('./VisualMagicTools') to your init.py
 
 Current Gizmos:\
 AOVEdit - Pelle J Nordentoft\
+DotGrid - Pelle J Nordentoft\
 Noise Begone - Markus Ädel
 
 Planned Gizmos:\

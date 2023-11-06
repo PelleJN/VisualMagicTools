@@ -1,0 +1,103 @@
+#! C:/Program Files/Nuke15.0v1/nuke-15.0.1.dll -nx
+version 15.0 v1
+Gizmo {
+ inputs 0
+ tile_color 0x55bfffff
+ addUserKnob {20 DotGrid}
+ addUserKnob {41 format l Format T Reformat1.format}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 dotlabel l "" +STARTLINE T "X/Y Dots:"}
+ addUserKnob {3 horizontal l "" t "Number of Horizontal dots" -STARTLINE}
+ horizontal 10
+ addUserKnob {3 vertical l "" t "Number of Vertical dots" -STARTLINE}
+ vertical 10
+ addUserKnob {6 squares l "Force 1:1 Dots" t "This will ignore the number of vertical dots and place them at the same distance they are horizontally.\nThis is likely to cause them to no longer be vertically centered." +STARTLINE}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {7 size l Size t "Size of the dots"}
+ size 0.1
+ addUserKnob {7 smooth l Smoothness t "Smoothness of the dots"}
+ smooth 0.1
+ addUserKnob {20 Info}
+ addUserKnob {26 infotext l "" +STARTLINE T "<font size=\"6\"><b>DotGrid</b></font><br>\n<i>v1.0.0</i> <br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\nAllows you to generate a bunch of dots"}
+}
+ Reformat {
+  inputs 0
+  name Reformat1
+  xpos 555
+  ypos 441
+ }
+ Expression {
+  expr0 (x+0.5)/width
+  expr1 (y+.5)/height
+  name STMap
+  xpos 555
+  ypos 492
+ }
+ Dot {
+  name Dot3
+  xpos 589
+  ypos 546
+ }
+set N82bb5400 [stack 0]
+ Expression {
+  temp_name0 xmod
+  temp_expr0 width/parent.horizontal
+  temp_name1 ymod
+  temp_expr1 height/parent.vertical
+  expr0 fmod(x,xmod)/xmod
+  expr1 fmod(y,ymod)/ymod
+  name Independent
+  xpos 555
+  ypos 598
+ }
+push $N82bb5400
+ Dot {
+  name Dot2
+  xpos 486
+  ypos 546
+ }
+ Expression {
+  temp_name0 mod
+  temp_expr0 width/parent.horizontal
+  expr0 fmod(x,mod)/mod
+  expr1 fmod(y,mod)/mod
+  name Square
+  xpos 452
+  ypos 598
+ }
+ Dot {
+  name Dot1
+  xpos 486
+  ypos 665
+ }
+ Switch {
+  inputs 2
+  which 1
+  name Switch1
+  xpos 555
+  ypos 662
+  disable {{parent.squares}}
+ }
+ Expression {
+  temp_name0 radius
+  temp_expr0 parent.size
+  temp_name1 distance
+  temp_expr1 "sqrt((r - 0.5) * (r - 0.5) + (g - 0.5) * (g - 0.5))"
+  temp_name2 gradient
+  temp_expr2 "1 - smoothstep(0, radius, distance)"
+  temp_name3 out
+  temp_expr3 "smoothstep(0, parent.smooth, gradient)"
+  expr0 out
+  expr1 out
+  expr2 out
+  expr3 out
+  name Dots
+  xpos 555
+  ypos 718
+ }
+ Output {
+  name Output1
+  xpos 555
+  ypos 778
+ }
+end_group
