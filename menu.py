@@ -1,6 +1,6 @@
-import nuke
-
 #version 0.0.1
+
+import nuke
 
 nuke.pluginAddPath('./gizmos')
 nuke.pluginAddPath('./images')
