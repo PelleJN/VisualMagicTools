@@ -1,4 +1,4 @@
-#version 0.0.2
+#version 0.1.0
 
 import nuke
 
@@ -13,7 +13,9 @@ vmNode = toolbar.addMenu('Visual Magic', icon = 'vmlogo.png')
 
 #add gizmos
 vmNode.addCommand('AOVEdit', 'nuke.createNode(\"AOVEdit\")')
+vmNode.addCommand('Despeckle', 'nuke.createNode(\"Despeckle\")')
 vmNode.addCommand('DotGrid', 'nuke.createNode(\"DotGrid\")')
 vmNode.addCommand('NoiseBegone', 'nuke.createNode(\"Noise_Begone\")')
+vmNode.addCommand('Toaster', 'nuke.createNode(\"Toaster\")')
 
 print("Visual Magic Toolkit Successfully Loaded")

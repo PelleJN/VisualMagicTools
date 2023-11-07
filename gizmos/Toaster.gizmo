@@ -1,0 +1,439 @@
+#! C:/Program Files/Nuke15.0v1/nuke-15.0.1.dll -nx
+version 15.0 v1
+Gizmo {
+ addUserKnob {20 User}
+ addUserKnob {3 LevelofToast l "Level of Toast" t "How toasty do you want your meal"}
+ LevelofToast {0}
+ addUserKnob {26 Airfy l "" +STARTLINE T "<br>1 -> Crispy<br><br>2 -> Crunchy<br><br> 3 -> Croquettes <br><br>4 -> §̶̪̲̣̣̆̅̀̑͜͠h̶̰̜͇̬̺͋̀̐́͠ð̷͚̫͚͇̥̔̈́̽̈́̈́r̷̡̲͓̭̖͊̆̌̌͝ñ̷̠͇̞̅̒̀̽̇͜ͅð̴̧̟̮̹̳́̑̈́̎̆ß̸̡̯̻͎̺̃̃́̕͝¥̶̬̖͓͖̔̅̀͑̓͜l̵̥̙͉̰̈́̌͒͗̄ͅ\n"}
+ addUserKnob {20 Info}
+ addUserKnob {26 Infoboard l "" +STARTLINE T "Have you ever dreamed about having your<br> very own Toaster? Well dream no more!<br><br>\nJust put the knob to your prefered level of<br>\ntoast and enjoy your meal!"}
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 text l "" +STARTLINE T "<font size = \".5\"<strong>Product Disclaimer:</strong><br>\nUse of this product is subject to the following safety information:<br>\n1. <strong>Non-Ionizing Technology:</strong> This product employs non-ionizing heat,<br>\nand while no radiation damage is expected, the manufacturer<br>\nis not responsible for any such claims.<br>\n2. <strong>Magnetic Emissions:</strong> A low-level magnetic field may be emitted.<br>\nIndividuals with medical implants should consult healthcare providers prior to use.<br>\n3. <strong>Usage Guidelines:</strong> Follow the recommended guidelines for safe<br>\nand responsible operation as excessive use is not advised.<br>\n4. <strong>Crumb Disposal:</strong> Regular maintenance, including crumb disposal, is advised<br>\nto prevent pest attraction.<br>\n5. <strong>Aroma Notice:</strong> The normal aroma of toasted bread is expected,<br>\nbut if unusual odors occur, cease use immediately and seek professional advice.<br><br>\nThe manufacturer disclaims all liability for injury or damage resulting<br>\nfrom misuse or product malfunction. In the event of adverse effects,<br>\ndiscontinue use immediately and consult medical advice. Use at your own risk.\n\n</font>"}
+ addUserKnob {6 IAgree l "I agree" +STARTLINE}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x7171c600
+  label Nuke
+  note_font_size 42
+  xpos 197
+  ypos 235
+  bdwidth 221
+  bdheight 459
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode2
+  tile_color 0x886388ff
+  label Deepfry
+  note_font_size 40
+  xpos -74
+  ypos 228
+  bdwidth 234
+  bdheight 457
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode3
+  tile_color 0x7a9359ff
+  label Airfry
+  note_font_size 40
+  xpos -401
+  ypos 229
+  bdwidth 297
+  bdheight 451
+ }
+ BackdropNode {
+  inputs 0
+  name BackdropNode4
+  tile_color 0x71c67100
+  label fallout
+  note_font_size 42
+  xpos 468
+  ypos 598
+  bdwidth 265
+  bdheight 298
+ }
+ Input {
+  inputs 0
+  name Input1
+  xpos -27
+  ypos -99
+ }
+ Remove {
+  operation keep
+  channels rgb
+  name Remove1
+  xpos -27
+  ypos -17
+ }
+ Dot {
+  name Dot22
+  xpos 7
+  ypos 46
+ }
+set N5f4e9c00 [stack 0]
+ Dot {
+  name Dot7
+  xpos 7
+  ypos 132
+ }
+set N9147d800 [stack 0]
+ Dot {
+  name Dot6
+  xpos 242
+  ypos 132
+ }
+set N82ee9c00 [stack 0]
+ Dot {
+  name Dot20
+  xpos 574
+  ypos 132
+ }
+push $N9147d800
+ Dot {
+  name Dot12
+  xpos -248
+  ypos 132
+ }
+set N9147dc00 [stack 0]
+ Dot {
+  name Dot19
+  xpos -536
+  ypos 132
+ }
+ Dot {
+  name Dot18
+  xpos -550
+  ypos 999
+ }
+set N96975000 [stack 0]
+push $N5f4e9c00
+ Dot {
+  name Dot21
+  xpos -700
+  ypos 46
+ }
+ FrameHold {
+  firstFrame 113
+  name FrameHold1
+  xpos -734
+  ypos 264
+ }
+ Saturation {
+  saturation 0.22
+  name Saturation1
+  xpos -734
+  ypos 300
+ }
+ Grade {
+  multiply 0.016
+  name Grade7
+  xpos -734
+  ypos 324
+ }
+ Text2 {
+  font_size_toolbar 100
+  font_width_toolbar 100
+  font_height_toolbar 100
+  message "Please read and accept\n terms of agreement before proceeding"
+  old_message {{80 108 101 97 115 101 32 114 101 97 100 32 97 110 100 32 97 99 99 101 112 116 10 32 116 101 114 109 115 32 111 102 32 97 103 114 101 101 109 101 110 116 32 98 101 102 111 114 101 32 112 114 111 99 101 101 100 105 110 103}
+    }
+  box {{width/2} {height/2} {width/2} {height/2}}
+  xjustify center
+  transforms {{0 2}
+    }
+  cursor_position 60
+  font {{ Cambria : Italic : cambriai.ttf : 0 }}
+  center {1024 778}
+  cursor_initialised true
+  autofit_bbox false
+  initial_cursor_position {{0 1556}
+    }
+  group_animations {{0} imported: 0 selected: items: "root transform/"}
+  animation_layers {{1 11 1024 778 0 0 1 1 0 0 0 0}
+    }
+  name Text2
+  xpos -742
+  ypos 1072
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  mix 0.708
+  name Merge7
+  xpos -742
+  ypos 1206
+ }
+ Switch {
+  which {{parent.IAgree}}
+  name Switch2
+  xpos -29
+  ypos 1217
+ }
+push $N82ee9c00
+ Dot {
+  name Dot2
+  xpos 242
+  ypos 297
+ }
+set Nbca32000 [stack 0]
+ Dot {
+  name Dot1
+  xpos 352
+  ypos 297
+ }
+ Grade {
+  white {1.52 0 0.18 0.26}
+  white_panelDropped true
+  gamma 1.74
+  name Grade1
+  xpos 318
+  ypos 349
+ }
+ Grade {
+  gamma {{random((frame)/2)}}
+  mix 0.06
+  name Grade2
+  xpos 318
+  ypos 373
+ }
+ Dot {
+  name Dot3
+  xpos 352
+  ypos 429
+ }
+push $Nbca32000
+ Merge2 {
+  inputs 2
+  operation difference
+  name Merge1
+  xpos 207
+  ypos 426
+ }
+ Reformat {
+  type "to box"
+  box_width 150
+  name Reformat1
+  xpos 207
+  ypos 489
+ }
+ Dot {
+  name Dot4
+  xpos 241
+  ypos 531
+ }
+set N98522000 [stack 0]
+ TemporalMedian {
+  core 1
+  name TemporalMedian1
+  xpos 328
+  ypos 522
+ }
+ Dot {
+  name Dot5
+  xpos 362
+  ypos 610
+ }
+push $N98522000
+ Merge2 {
+  inputs 2
+  operation from
+  mix 0.95
+  name Merge2
+  xpos 207
+  ypos 607
+ }
+ Sharpen {
+  amount 100
+  size 50
+  name Sharpen1
+  xpos 207
+  ypos 654
+ }
+set N98523000 [stack 0]
+ Dot {
+  name Dot25
+  xpos 573
+  ypos 663
+ }
+ Reformat {
+  type "to box"
+  box_width 51
+  name Reformat3
+  xpos 539
+  ypos 727
+ }
+ Grade {
+  white {{int(sin(2*pi*(frame)/24)+1)+1}}
+  gamma {1 10 1 1}
+  name Grade6
+  xpos 540
+  ypos 771
+ }
+ Glow2 {
+  tint {0.433333 1.433333 0.433333 0.65}
+  tint_panelDropped true
+  brightness {{int(sin(2*pi*(frame)/24)+1)}}
+  saturation 5
+  name Glow1
+  selected true
+  xpos 540
+  ypos 825
+ }
+set N779d7000 [stack 0]
+ Dot {
+  name Dot32
+  xpos 574
+  ypos 1195
+ }
+push $N98523000
+ Dot {
+  name Dot23
+  xpos 241
+  ypos 999
+ }
+push $N9147d800
+ Grade {
+  blackpoint 0.008
+  gamma 1.64
+  name Grade4
+  xpos -27
+  ypos 297
+ }
+ Dot {
+  name Dot8
+  xpos 6
+  ypos 402
+ }
+set N82ee8400 [stack 0]
+ Dot {
+  name Dot9
+  xpos 101
+  ypos 402
+ }
+ Grade {
+  white {1.52 0 0.18 0.26}
+  white_panelDropped true
+  gamma 1.74
+  name Grade3
+  xpos 67
+  ypos 435
+ }
+ Dot {
+  name Dot10
+  xpos 101
+  ypos 534
+ }
+push $N82ee8400
+ Merge2 {
+  inputs 2
+  operation difference
+  mix 0.145
+  name Merge3
+  xpos -29
+  ypos 531
+ }
+ Sharpen {
+  amount 50
+  size 5
+  name Sharpen2
+  xpos -29
+  ypos 586
+ }
+push $N9147dc00
+ Dot {
+  name Dot15
+  xpos -248
+  ypos 270
+ }
+set Nb24ba800 [stack 0]
+ Dot {
+  name Dot17
+  xpos -172
+  ypos 270
+ }
+ Grade {
+  whitepoint {0.34 1 1 1}
+  whitepoint_panelDropped true
+  name Grade5
+  xpos -206
+  ypos 311
+ }
+ Dot {
+  name Dot16
+  xpos -172
+  ypos 458
+ }
+push $Nb24ba800
+ Dot {
+  name Dot11
+  xpos -248
+  ypos 314
+ }
+set Nb24bb800 [stack 0]
+ Blur {
+  size 21.5
+  name Blur1
+  xpos -371
+  ypos 305
+ }
+ Dot {
+  name Dot13
+  xpos -337
+  ypos 388
+ }
+push $Nb24bb800
+ Merge2 {
+  inputs 2
+  operation from
+  mix 0.505
+  name Merge4
+  xpos -282
+  ypos 385
+ }
+ Merge2 {
+  inputs 2
+  mix 0.115
+  name Merge6
+  xpos -282
+  ypos 455
+ }
+ Sharpen {
+  amount 2
+  size 10
+  name Sharpen3
+  xpos -282
+  ypos 490
+ }
+ Dot {
+  name Dot14
+  xpos -248
+  ypos 745
+ }
+push $N96975000
+ Switch {
+  inputs 5
+  which {{parent.LevelofToast}}
+  name Switch1
+  xpos -29
+  ypos 996
+ }
+ Output {
+  name Output1
+  xpos -282
+  ypos 1569
+ }
+push $N779d7000
+ Viewer {
+  frame 1091
+  frame_range 1-5000
+  translate {-0.621999979 -0.02199999988}
+  gauge 0.05877304077
+  monitorOutOutputTransform rec709
+  name Viewer1
+  xpos 30
+  ypos 1558
+ }
+end_group

@@ -1,3 +1,7 @@
+v0.1.0
+ - Added Toaster v1.0.0
+ - Added Despeckle v1.0.0
+
 v0.0.2
  - Added DotGrid v1.0.0
 

@@ -1,0 +1,288 @@
+#! C:/Program Files/Nuke15.0v1/nuke-15.0.1.dll -nx
+version 15.0 v1
+Gizmo {
+ tile_color 0x55bfffff
+ addUserKnob {20 despeckle l Despeckle}
+ addUserKnob {68 mathtype l "Value Math" t "\n<b>Max Value</b> - Considers only the brightest of R, G and B.<br>\n<b>Luma</b> - Considers the luminance (based on rec.709)" M {"Max Value" Luma "" ""}}
+ addUserKnob {7 valthresh l "Value Threshold" t "The minimum value a pixel has to be in order to be removed." R 0 2}
+ valthresh 0.75
+ addUserKnob {3 neighborthresh l "Neighbor Threshold" t "The number of bright neighbors a bright pixel needs in order to not be removed. (A pixel with less than this is removed)<br>\nThe maximum a pixel can have is 8."}
+ neighborthresh 4
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {6 edgerestore l "Edge Restoration" t "Restores the image around bright non-firefly areas." +STARTLINE}
+ edgerestore true
+ addUserKnob {7 edgerestoreradius l "Restoration Radius" t "The distance around bright areas to restore" R 2 10}
+ edgerestoreradius 2
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {6 alphafireflies l "Fireflies in Alpha" t "Replaces the alpha with a mask of the pixels that were affected." +STARTLINE}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 infotext l "" +STARTLINE T "<font size=\"6\"><b>Despeckle</b></font><br>\n<i>v1.0.0</i> <br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\nThis node compares pixels to neighboring ones.<br>\nIf a pixel is bright but does not have bright neighbors,<br>\nit is deemed to be a firefly and removed."}
+}
+ StickyNote {
+  inputs 0
+  name StickyNote1
+  label "Original Alpha"
+  xpos -794
+  ypos 1167
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote3
+  label "Edge Restoration Radius\nLimit to min 2"
+  xpos -654
+  ypos 741
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote2
+  label "Edge Restoration"
+  xpos -697
+  ypos 837
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote5
+  label "Max or Luma Math"
+  xpos -564
+  ypos 366
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos -907
+  ypos 175
+ }
+ Dot {
+  name Dot52
+  xpos -873
+  ypos 238
+ }
+set N62e05400 [stack 0]
+ Dot {
+  name Dot55
+  xpos -994
+  ypos 238
+ }
+set N1b211c00 [stack 0]
+ Dot {
+  name Dot62
+  xpos -1091
+  ypos 238
+ }
+ Dot {
+  name Dot61
+  xpos -1091
+  ypos 1168
+ }
+push $N62e05400
+ Dot {
+  name Dot50
+  xpos -725
+  ypos 238
+ }
+set N3a2ad400 [stack 0]
+ Dot {
+  name Dot51
+  xpos -606
+  ypos 238
+ }
+ Saturation {
+  saturation 0
+  name Saturation1
+  xpos -640
+  ypos 294
+ }
+ Dot {
+  name Dot49
+  xpos -606
+  ypos 367
+ }
+push $N3a2ad400
+ Expression {
+  expr0 "max(r, g, b)"
+  expr1 "max(r, g, b)"
+  expr2 "max(r, g, b)"
+  expr3 "max(r, g, b)"
+  name GreatestValue
+  xpos -759
+  ypos 294
+ }
+ Switch {
+  inputs 2
+  which {{parent.mathtype}}
+  name Switch1
+  xpos -759
+  ypos 364
+ }
+ BlinkScript {
+  recompileCount 101
+  ProgramGroup 1
+  KernelDescription "3 \"Despeckle\" iterate pixelWise fa443ad6be505ab708878eb622a03ae9c6d870f01cc1b3562bf99c78d8db5d86 2 \"src\" Read Ranged2D \"dst\" Write Point 2 \"Neighbor Threshold\" Int 1 AgAAAA== \"Value Threshold\" Float 1 AACAPw== 2 \"neighborthresh\" 1 1 Default \"valuethresh\" 1 1 Default 5 \"srcrangeMin\" Int 2 1 AAAAAAAAAAA= \"srcrangeMax\" Int 2 1 AAAAAAAAAAA= \"_filterSize\" Int 1 1 AAAAAA== \"xRadius\" Int 1 1 AAAAAA== \"yRadius\" Int 1 1 AAAAAA=="
+  kernelSource "kernel Despeckle : ImageComputationKernel<ePixelWise>\n\{\n    Image<eRead, eAccessRanged2D, eEdgeClamped> src;\n    Image<eWrite, eAccessPoint> dst;\n\n    param:\n        int neighborthresh;\n        float valuethresh;\n\n    local:\n        int _filterSize;\n        int xRadius;\n        int yRadius;\n\n    void define() \{\n        defineParam(neighborthresh, \"Neighbor Threshold\", 2);\n        defineParam(valuethresh, \"Value Threshold\", 1.0f);\n    \}\n\n    void init() \{\n        xRadius = 1; // don't change\n        yRadius = 1; // don't change\n\n        //Set the range we need to access from the source \n        src.setRange(-xRadius, -yRadius, xRadius, yRadius);\n\n        _filterSize = (2 * xRadius + 1) * (2 * yRadius + 1);\n    \}\n\n    void process()\n    \{\n        int count = 0; // Initialize a counter\n\n        for (int j = -yRadius; j <= yRadius; j++)\n        \{\n            for (int i = -xRadius; i <= xRadius; i++)\n            \{\n                if (j != 0 || i != 0) // If not the center pixel\n                \{\n                    float pixelValue = src(i, j).x; // Access the pixel value using (i, j)\n                    if (pixelValue >= valuethresh)\n                    \{\n                        count++; // Increase the count when a surrounding pixel is greater than the threshold\n                    \}\n                \}\n            \}\n        \}\n\n        int neighborcount = (src(0, 0).x >= 1.0f) ? count : 0.0f;\n        int neighborcull = (neighborcount >= neighborthresh) ? 1.0f : 0.0f;\n        int brightpixels = (src(0, 0).x >= valuethresh) ? 1.0f : 0.0f;\n        int badpixels = brightpixels - neighborcull;\n\n        dst() = float4(0.0f, 0.0f, 0.0f, badpixels);\n    \};\n\};"
+  rebuild ""
+  "Despeckle_Neighbor Threshold" {{parent.neighborthresh}}
+  "Despeckle_Value Threshold" {{parent.valthresh}}
+  rebuild_finalise ""
+  name BlinkScript2
+  xpos -759
+  ypos 424
+ }
+push $N62e05400
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy2
+  xpos -907
+  ypos 424
+ }
+ Inpaint2 {
+  center {640 960}
+  name Inpaint1
+  xpos -907
+  ypos 527
+ }
+ Dot {
+  name Dot53
+  xpos -873
+  ypos 617
+ }
+set Nd1372c00 [stack 0]
+ Dot {
+  name Dot54
+  xpos -732
+  ypos 617
+ }
+set N150bd400 [stack 0]
+ Dot {
+  name Dot1
+  xpos -469
+  ypos 617
+ }
+ Dot {
+  name Dot2
+  xpos -469
+  ypos 1089
+ }
+push $N150bd400
+ Expression {
+  expr0 "max(r, g, b)"
+  expr1 "max(r, g, b)"
+  expr2 "max(r, g, b)"
+  expr3 "max(r, g, b)"
+  name GreatestValue1
+  xpos -766
+  ypos 654
+ }
+ Expression {
+  temp_name0 x
+  temp_expr0 parent.valthresh
+  expr0 "r >= x ? 1 : 0"
+  expr1 0
+  expr2 0
+  expr3 0
+  name ThresholdPixels
+  xpos -766
+  ypos 701
+ }
+ Blur {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  size {{parent.edgerestoreradius}}
+  name Blur2
+  xpos -766
+  ypos 746
+ }
+ Grade {
+  whitepoint 0.5
+  name Grade3
+  xpos -766
+  ypos 795
+ }
+ Dot {
+  name Dot57
+  xpos -732
+  ypos 838
+ }
+set N1b99b000 [stack 0]
+ Dot {
+  name Dot58
+  xpos -732
+  ypos 936
+ }
+push $N1b211c00
+ Dot {
+  name Dot56
+  xpos -994
+  ypos 838
+ }
+set N14b00000 [stack 0]
+ Expression {
+  expr3 0
+  name Expression2
+  xpos -1028
+  ypos 933
+ }
+push $N1b99b000
+push $N14b00000
+push $Nd1372c00
+ Keymix {
+  inputs 3
+  channels rgba
+  maskChannel rgba.red
+  name Keymix1
+  xpos -907
+  ypos 835
+ }
+ Copy {
+  inputs 2+1
+  from0 rgba.alpha
+  to0 rgba.alpha
+  bbox B
+  maskChannelMask rgba.red
+  name Copy4
+  xpos -907
+  ypos 927
+ }
+ Expression {
+  expr3 "a >= 1 ? 1 : 0"
+  name Expression1
+  xpos -907
+  ypos 1017
+ }
+ Switch {
+  inputs 2
+  which 1
+  name Switch2
+  xpos -907
+  ypos 1086
+  disable {{parent.edgerestore}}
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  name Copy5
+  xpos -907
+  ypos 1159
+  disable {{parent.alphafireflies}}
+ }
+ Output {
+  name Output
+  xpos -907
+  ypos 1259
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote4
+  label "Bad Pixel Alpha"
+  xpos -796
+  ypos 1018
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote6
+  label "Edge Restoration\nToggle"
+  xpos -1032
+  ypos 1080
+ }
+end_group
