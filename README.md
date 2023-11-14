@@ -11,6 +11,6 @@ Despeckle - Pelle J Nordentoft\
 DotGrid - Pelle J Nordentoft\
 Noise Begone - Markus Ädel\
 Toaster - Markus Ädel
-
+<!-- 
 Planned Gizmos:\
-Despeckle - Pelle J Nordentoft
+Despeckle - Pelle J Nordentoft -->
