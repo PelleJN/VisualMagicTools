@@ -1,5 +1,8 @@
-v0.1.1
+v0.1.2
  - Updated Despeckle to v2.0.0, featuring significant performance increases.
+
+v0.1.1
+ - Updated faulty README.md
 
 v0.1.0
  - Added Toaster v1.0.0
