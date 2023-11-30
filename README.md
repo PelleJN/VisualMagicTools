@@ -11,6 +11,7 @@ Despeckle - Pelle J Nordentoft\
 DotGrid - Pelle J Nordentoft\
 Noise Begone - Markus Ädel\
 Toaster - Markus Ädel
-<!-- 
+
 Planned Gizmos:\
-Despeckle - Pelle J Nordentoft -->
+Edge Fixer - Pelle J Nordentoft (a simpler way to Edge Extend alphas)
+Frequency Inpaint (inpaint with the ability to add high-frequency detail from elsewhere)
