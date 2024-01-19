@@ -1,22 +1,39 @@
 #! C:/Program Files/Nuke15.0v1/nuke-15.0.1.dll -nx
 version 15.0 v1
 Gizmo {
- onCreate "n = nuke.thisNode()\nw = n.format().width()/2\nh = n.format().height()/2\n\ncenter = \[w,h]    \n\nif n.knob('create').value()==False:\n    n.knob('lightpos').setValue(center)\n    n.knob('create').setValue(1)\n"
  inputs 3
+ onCreate "n = nuke.thisNode()\nw = n.format().width() / 2\nh = n.format().height() / 2\n\ncenter = \[w, h]\n\nif n.knob('create').value() == False:\n    n.knob('lightpos').setValue(center)\n    n.knob('create').setValue(1)\n\n\n\n"
+ knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() == \"follow_aspect\" and k.value() == 1:\n    n\[\"radius_source\"].setEnabled(False)\nelse:\n    n\[\"radius_source\"].setEnabled(True)"
  tile_color 0x55bfffff
  addUserKnob {20 User}
  addUserKnob {41 lightpos l "Light Position" T DISTANCE.lightpos}
  addUserKnob {6 customnormals l "Use Custom Normals" +STARTLINE}
+ addUserKnob {6 only_light l "Output Light Only" t "Subtracts the original image from the graded image, resulting in only the graded light being output." +STARTLINE}
+ addUserKnob {6 follow_aspect l "Follow Aspect Ratio" t "Makes the light radius eliptical, following the aspect ratio of the image." +STARTLINE}
+ addUserKnob {4 radius_source l "Radius Source" t "Which dimension to use when calculating the radius of the light. " M {Height Width "" "" "" ""}}
  addUserKnob {26 ""}
- addUserKnob {20 grp_centertrim l "Mask Edits" n 1}
- grp_centertrim 0
+ addUserKnob {20 grp_normaledits l "Normal Edits" t "Softens the generated normals." n 1}
+ grp_normaledits 0
  addUserKnob {7 soften l Soften R 0 10}
  soften 3
+ addUserKnob {26 ""}
+ addUserKnob {20 endGroup_2 n -1}
+ addUserKnob {20 grp_centertrim l "Mask Edits" n 1}
+ grp_centertrim 0
  addUserKnob {7 triminner l "Erode Center" t "Erode away the lights from the center."}
  triminner 0.15
  addUserKnob {7 trimouter l "Feather Center" t "Feathers the Center Erode outwards."}
  trimouter 0.15
- addUserKnob {41 white l "Mask Gain" T Grade3.white}
+ addUserKnob {7 radius l Radius t "How far the light reaches."}
+ radius 0.2
+ addUserKnob {7 radius_feather l "Radius Feather" t "Feathers the radius inwards."}
+ radius_feather 0.5
+ addUserKnob {6 preview_radius l "Preview Radius" t "Previews the radius of the light." +STARTLINE}
+ addUserKnob {7 ray_length l "Ray Length" t "Makes the light reach farther instead of just being on the edges of things."}
+ ray_length 0.5
+ addUserKnob {7 ray_falloff l "Ray Falloff" t "Makes the ray lose intensity farther from its origin."}
+ ray_falloff 0.75
+ addUserKnob {41 white l "Mask Gain" t "Strengthens the mask where the light is applied." T Grade3.white}
  addUserKnob {26 _1 l "" +STARTLINE}
  addUserKnob {20 endGroup n -1}
  addUserKnob {20 grp_grade l Grade n 1}
@@ -35,39 +52,51 @@ Gizmo {
  addUserKnob {20 endGroup_1 l endGroup n -1}
  addUserKnob {26 ""}
  addUserKnob {26 "" l mask T ""}
- addUserKnob {41 maskChannelMask l "" -STARTLINE T Merge1.maskChannelMask}
- addUserKnob {41 inject -STARTLINE T Merge1.inject}
- addUserKnob {41 invert_mask l invert -STARTLINE T Merge1.invert_mask}
- addUserKnob {41 fringe -STARTLINE T Merge1.fringe}
+ addUserKnob {41 maskChannelMask l "" -STARTLINE T MaskMerge.maskChannelMask}
+ addUserKnob {41 inject -STARTLINE T MaskMerge.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T MaskMerge.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T MaskMerge.fringe}
  addUserKnob {41 mix T Grade2.mix}
  addUserKnob {6 usealpha l "Mask in Alpha" +STARTLINE}
  usealpha true
  addUserKnob {6 create +INVISIBLE +STARTLINE}
+ create true
  addUserKnob {20 info l Info}
- addUserKnob {26 infotext l "" +STARTLINE T "<font size=\"6\"><b>NormalLight</b></font><br>\n<i>v1.0.0</i> <br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\nThis node allows you to grade parts of an\nimage<br>\nwhose \"normals\" are aimed towards a specified position.<br>\n\n<br><br><br>\n\nUses  <a href=\"http://www.nukepedia.com/toolsets/other/vectortools/\" style=\"color:gray;\">Luma_to_Normals</a> by Erwan Leroy."}
+ addUserKnob {26 infotext l "" +STARTLINE T "<font size=\"6\"><b>NormalLight</b></font><br>\n<i>v1.1.0</i> <br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\nThis node allows you to grade parts of an\nimage<br>\nwhose \"normals\" are aimed towards a specified position.<br>\n\n<br><br><br>\n\nUses  parts of <a href=\"http://www.nukepedia.com/toolsets/other/vectortools/\" style=\"color:gray;\">Luma_to_Normals</a> by Erwan Leroy."}
 }
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x666666ff
+  label "MAKE NORMALS"
+  note_font_size 42
+  xpos 550
+  ypos -427
+  bdwidth 210
+  bdheight 682
+ }
  Input {
   inputs 0
   name Inputsrc
   xpos 244
-  ypos 170
+  ypos -585
  }
  Dot {
   name Dot6
   xpos 278
-  ypos 223
+  ypos -513
  }
-set Ne1826000 [stack 0]
+set N938cb400 [stack 0]
  Dot {
   name Dot2
   xpos 594
-  ypos 223
+  ypos -513
  }
-set Ne1826400 [stack 0]
+set N938cb800 [stack 0]
  Dot {
   name Dot3
-  xpos 781
-  ypos 223
+  xpos 1014
+  ypos -513
  }
  Expression {
   expr0 0
@@ -75,29 +104,29 @@ set Ne1826400 [stack 0]
   expr2 0
   expr3 0
   name BLANK
-  xpos 747
+  xpos 980
   ypos 260
  }
  Expression {
-  expr0 (x+0.5)/width
-  expr1 (y+0.5)/height
+  expr0 "(x+0.5)/(parent.follow_aspect ? width : (parent.radius_source == 1 ? width : height))"
+  expr1 "(y+0.5)/(parent.follow_aspect ? height : (parent.radius_source == 1 ? width : height))"
   expr2 0
   expr3 0
   name STMAP
-  xpos 747
+  xpos 980
   ypos 308
  }
  Expression {
   temp_name0 centerX
-  temp_expr0 int(lightpos.x)/width
+  temp_expr0 "int(lightpos.x)/(parent.follow_aspect ? width : (parent.radius_source == 1 ? width : height))"
   temp_name1 centerY
-  temp_expr1 int(lightpos.y)/height
+  temp_expr1 "int(lightpos.y)/(parent.follow_aspect ? height : (parent.radius_source == 1 ? width : height))"
   expr0 "r - centerX"
   expr1 "g - centerY"
   expr2 0
   expr3 0
   name DISTANCE
-  xpos 747
+  xpos 980
   ypos 360
   addUserKnob {20 User}
   addUserKnob {12 lightpos l "Light Position"}
@@ -107,7 +136,7 @@ set Ne1826400 [stack 0]
   expr2 "hypot(r, g)"
   expr3 "hypot(r, g)"
   name MAGNITUDE
-  xpos 747
+  xpos 980
   ypos 412
   cached true
  }
@@ -115,31 +144,98 @@ set Ne1826400 [stack 0]
   expr0 "r / b"
   expr1 "g / b"
   name NORMAL
-  xpos 747
+  xpos 980
   ypos 464
  }
  Dot {
   name Dot1
-  xpos 781
+  xpos 1014
   ypos 511
  }
-set Ne1944000 [stack 0]
+set Naf5d9400 [stack 0]
+ Dot {
+  name Dot22
+  xpos 901
+  ypos 511
+ }
+set Naf5d9800 [stack 0]
+ Expression {
+  temp_name0 inner
+  temp_expr0 lerp(parent.radius-0.001,0,parent.radius_feather)
+  temp_name1 outer
+  temp_expr1 parent.radius
+  expr3 "smoothstep(outer, inner, a)"
+  name InnerCircleMask1
+  xpos 867
+  ypos 572
+ }
+ Dot {
+  name Dot23
+  xpos 901
+  ypos 638
+ }
+push $Naf5d9400
  Expression {
   temp_name0 inner
   temp_expr0 parent.triminner/10
   temp_name1 outer
   temp_expr1 inner+parent.trimouter/10
   expr3 "smoothstep(inner, outer, a)"
-  name Expression1
-  xpos 747
-  ypos 572
+  name InnerCircleMask
+  xpos 980
+  ypos 573
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  bbox B
+  Achannels alpha
+  Bchannels alpha
+  output alpha
+  name Merge3
+  xpos 980
+  ypos 629
  }
  Dot {
   name Dot7
-  xpos 781
-  ypos 649
+  xpos 1014
+  ypos 697
  }
-push $Ne1944000
+set Naf4d4c00 [stack 0]
+ Expression {
+  expr0 a
+  expr1 a
+  expr2 a
+  expr3 a
+  name AlphaEverywhere
+  xpos 980
+  ypos 886
+ }
+ Dot {
+  name Dot24
+  xpos 1014
+  ypos 1677
+ }
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 11
+  ypos 1186
+  number 2
+ }
+ Dot {
+  name Dot12
+  xpos 45
+  ypos 1261
+ }
+set Naf4d5c00 [stack 0]
+ Dot {
+  name Dot13
+  xpos 45
+  ypos 1441
+ }
+push $Naf4d4c00
+push $Naf5d9800
  Input {
   inputs 0
   name Inputnormals
@@ -152,280 +248,111 @@ push $Ne1944000
   xpos 460
   ypos 407
  }
-push $Ne1826400
- Group {
-  name Luma_to_Normals
-  help "Performs a Sobel filter on the Luminance channel of an image to extract an approximation of a Normal map.\n\nFor a mathematical conversion of a displacement map to normals, do not use Details separation."
+push $N938cb800
+ Saturation {
+  saturation 0
+  name Desaturate
   xpos 560
-  ypos 272
-  addUserKnob {20 luma_to_normals l "Luma to Normals"}
-  addUserKnob {26 div_pre l Pre-Process}
-  addUserKnob {7 blur R 0 10}
-  addUserKnob {7 gain}
-  gain 1
-  addUserKnob {26 div_details l "Details Separation"}
-  addUserKnob {7 size t "Bigger sizes will separate high and low frequencies more." R 0 100}
-  size {{parent.soften}}
-  addUserKnob {7 details_weight t "How much the details affect the final output"}
-  addUserKnob {26 div_out l Output}
-  addUserKnob {4 value_check t "Some big values might create impossible normals. Use gain and Blur to ensure there are no error values.\n\nValues in red on error check represent a vertical normal (parallel to the camera) which would not normally be visible to the camera." M {Result "Check Errors" "" "" "" ""}}
-  addUserKnob {6 normalize t "Switch between -1 to 1 range or 0 to 1 range" +STARTLINE}
-  addUserKnob {6 legalize t "Normal maps should generally be represented with a vector magnitude of 1.\nTurning on legalization will scale all vectors to ensure they all have a magnitude of 1.\n\nYou may want to disable it for more interesting effects when generating normals for a fake refraction through an iDistort, where having vectors of different length adds depth." -STARTLINE}
-  legalize true
-  addUserKnob {26 ""}
-  addUserKnob {26 copyright l "" t www.erwanleroy.com +STARTLINE T "v1.1 - Part of VectorTools by Erwan Leroy"}
+  ypos -322
  }
-  Input {
-   inputs 0
-   name Input1
-   xpos -576
-   ypos -296
-  }
-  Saturation {
-   saturation 0
-   name Saturation1
-   xpos -576
-   ypos -243
-  }
-  Blur {
-   size {{parent.blur}}
-   name Blur2
-   xpos -576
-   ypos -196
-  }
-  Multiply {
-   value {{0.5*parent.gain}}
-   name Multiply1
-   xpos -576
-   ypos -134
-  }
-set Ne2056000 [stack 0]
-  Blur {
-   size {{parent.size}}
-   name Blur1
-   xpos -576
-   ypos -83
-  }
-  Dot {
-   name Dot2
-   xpos -542
-   ypos -45
-  }
-set Ne2056800 [stack 0]
-  Matrix {
-   matrix {
-       {2 0 -2}
-       {1 0 -1}
-       {2 0 -2}
-     }
-   name Matrix1
-   xpos -576
-   ypos 38
-  }
-push $Ne2056800
-  Dot {
-   name Dot3
-   xpos -432
-   ypos -45
-  }
-set Ne2057000 [stack 0]
-  Matrix {
-   matrix {
-       {-2 -1 -2}
-       {0 0 0}
-       {2 1 2}
-     }
-   name Matrix2
-   xpos -466
-   ypos 37
-  }
-  Dot {
-   name Dot4
-   xpos -432
-   ypos 92
-  }
-  ShuffleCopy {
-   inputs 2
-   red red
-   blue black
-   alpha black
-   name ShuffleCopy1
-   xpos -575
-   ypos 88
-  }
-  Multiply {
-   value {{(1-parent.details_weight)*(parent.size/10+1)}}
-   name Multiply2
-   xpos -577
-   ypos 128
-  }
-push $Ne2057000
-push $Ne2056000
-  Dot {
-   name Dot1
-   xpos -319
-   ypos -124
-  }
-  Merge2 {
-   inputs 2
-   operation from
-   name Merge1
-   xpos -353
-   ypos -49
-  }
-  Dot {
-   name Dot5
-   xpos -319
-   ypos -23
-  }
-set Ne2088c00 [stack 0]
-  Matrix {
-   matrix {
-       {2 0 -2}
-       {1 0 -1}
-       {2 0 -2}
-     }
-   name Matrix3
-   xpos -353
-   ypos 31
-  }
-push $Ne2088c00
-  Dot {
-   name Dot6
-   xpos -181
-   ypos -23
-  }
-  Matrix {
-   matrix {
-       {-2 -1 -2}
-       {0 0 0}
-       {2 1 2}
-     }
-   name Matrix4
-   xpos -215
-   ypos 33
-  }
-  Dot {
-   name Dot7
-   xpos -181
-   ypos 87
-  }
-  ShuffleCopy {
-   inputs 2
-   red red
-   blue black
-   alpha black
-   name ShuffleCopy2
-   xpos -353
-   ypos 83
-  }
-  Multiply {
-   value {{parent.details_weight}}
-   name Multiply3
-   xpos -353
-   ypos 119
-  }
-  Dot {
-   name Dot8
-   xpos -319
-   ypos 188
-  }
-  Merge2 {
-   inputs 2
-   operation plus
-   name Merge2
-   xpos -577
-   ypos 184
-  }
-  Expression {
-   temp_name0 mag
-   temp_expr0 sqrt(pow(r,2)+pow(g,2)+pow(b,2))
-   expr0 mag>1?r/mag:r
-   expr1 mag>1?g/mag:g
-   name Expression3
-   xpos -577
-   ypos 222
-   disable {{1-parent.legalize}}
-  }
-set Ne1683000 [stack 0]
-  Expression {
-   temp_name0 facing
-   temp_expr0 sqrt(-pow(r,2)-pow(g,2)+1)
-   expr2 isnan(facing)?0:facing
-   name Expression2
-   xpos -577
-   ypos 247
-  }
-set Ne1683400 [stack 0]
-  Viewer {
-   frame_range 1-87
-   fps 12
-   name Viewer1
-   xpos -178
-   ypos 308
-  }
-push $Ne1683000
-  Dot {
-   name Dot9
-   xpos -400
-   ypos 225
-  }
-  Remove {
-   operation keep
-   channels rgb
-   name Remove2
-   xpos -434
-   ypos 271
-  }
-  Expression {
-   temp_name0 facing
-   temp_expr0 sqrt(-pow(r,2)-pow(g,2)+1)
-   expr0 isnan(facing)?1:0
-   expr1 0
-   name Expression1
-   xpos -434
-   ypos 314
-  }
-  Dot {
-   name Dot10
-   xpos -400
-   ypos 378
-  }
-push $Ne1683400
-  Remove {
-   operation keep
-   channels rgb
-   name Remove1
-   xpos -577
-   ypos 273
-  }
-  Grade {
-   white 0.5
-   add 0.5
-   name Grade1
-   xpos -577
-   ypos 313
-   disable {{1-parent.normalize}}
-  }
-  Switch {
-   inputs 2
-   which {{parent.value_check}}
-   name Switch1
-   xpos -576
-   ypos 374
-  }
-  Output {
-   name Output1
-   xpos -576
-   ypos 426
-  }
- end_group
+ Multiply {
+  value 0.5
+  name Multiply
+  label "\[value value]"
+  xpos 560
+  ypos -277
+ }
+ Blur {
+  size {{parent.soften}}
+  name Soften
+  label "\[value size]"
+  xpos 560
+  ypos -206
+ }
+ Dot {
+  name Dot19
+  xpos 594
+  ypos -138
+ }
+set Naf387800 [stack 0]
+ Dot {
+  name Dot20
+  xpos 704
+  ypos -138
+ }
+ Matrix {
+  matrix {
+      {-2 -1 -2}
+      {0 0 0}
+      {2 1 2}
+    }
+  name MatrixVertical
+  xpos 670
+  ypos -90
+ }
+ Dot {
+  name Dot21
+  xpos 704
+  ypos -12
+ }
+push $Naf387800
+ Matrix {
+  matrix {
+      {2 0 -2}
+      {1 0 -1}
+      {2 0 -2}
+    }
+  name MatrixHorizontal
+  xpos 560
+  ypos -89
+ }
+ Shuffle2 {
+  inputs 2
+  fromInput1 {{0} B A}
+  fromInput2 {{1} B A}
+  in2 rgb
+  mappings "4 rgba.red 0 0 rgba.red 0 0 rgba.green 1 1 rgba.green 0 1 black -1 -1 rgba.blue 0 2 black -1 -1 rgba.alpha 0 3"
+  name Shuffle_G_Into_B
+  xpos 560
+  ypos -21
+ }
+ Multiply {
+  value {{1*(parent.soften/10+1)}}
+  name UndoSoftnessValueLoss
+  xpos 560
+  ypos 47
+ }
+ Expression {
+  temp_name0 mag
+  temp_expr0 sqrt(pow(r,2)+pow(g,2)+pow(b,2))
+  expr0 mag>1?r/mag:r
+  expr1 mag>1?g/mag:g
+  name Legalize
+  xpos 560
+  ypos 108
+  disable {{1-parent.legalize x1 1}}
+ }
+ Expression {
+  temp_name0 facing
+  temp_expr0 sqrt(-pow(r,2)-pow(g,2)+1)
+  expr2 isnan(facing)?0:facing
+  name Facing
+  xpos 560
+  ypos 159
+ }
+ Remove {
+  operation keep
+  channels rgb
+  name RemoveChannels
+  xpos 560
+  ypos 204
+ }
  Expression {
   expr0 r*-1
   expr1 g*-1
   name INVERT_DIR
   xpos 560
-  ypos 318
+  ypos 317
  }
  Switch {
   inputs 2
@@ -483,7 +410,7 @@ push $Ne1683400
    xpos 34
    ypos 108
   }
-set Ne13edc00 [stack 0]
+set Naf22bc00 [stack 0]
   Shuffle {
    name vector_layer
    xpos 140
@@ -513,7 +440,7 @@ set Ne13edc00 [stack 0]
    xpos 174
    ypos 364
   }
-push $Ne13edc00
+push $Naf22bc00
   ShuffleCopy {
    inputs 2
    in2 none
@@ -522,6 +449,7 @@ push $Ne13edc00
    blue blue
    out {{{parent.vector_layer.in}}}
    name ShuffleCopy1
+   selected true
    xpos 0
    ypos 360
   }
@@ -534,7 +462,7 @@ push $Ne13edc00
  Grade {
   name Grade3
   xpos 560
-  ypos 569
+  ypos 592
  }
  Copy {
   inputs 2
@@ -542,93 +470,161 @@ push $Ne13edc00
   to0 rgba.alpha
   name Copy2
   xpos 560
-  ypos 640
+  ypos 688
  }
  Premult {
   name Premult1
   xpos 560
-  ypos 699
+  ypos 746
+ }
+ Dot {
+  name Dot17
+  xpos 594
+  ypos 834
+ }
+set Naf288400 [stack 0]
+ Dot {
+  name Dot16
+  xpos 501
+  ypos 834
+ }
+ Dot {
+  name Dot18
+  xpos 501
+  ypos 1022
+ }
+push $Naf288400
+ Crop {
+  box {{bbox.x} {bbox.y} {bbox.w+bbox.x} {bbox.h+bbox.y}}
+  crop false
+  name BBoxGet
+  xpos 560
+  ypos 871
+ }
+ GodRays {
+  channels {rgba.red -rgba.green -rgba.blue none}
+  scale {{lerp(1,1.1,parent.ray_length)}}
+  center {{parent.lightpos.x} {parent.lightpos.y}}
+  to_color {{lerp(1,0,parent.ray_falloff)}}
+  name GodRays1
+  xpos 560
+  ypos 920
+ }
+ Crop {
+  box {{parent.BBoxGet.box.x} {parent.BBoxGet.box.y} {parent.BBoxGet.box.r} {parent.BBoxGet.box.t}}
+  crop false
+  name BBoxSet
+  xpos 560
+  ypos 972
+ }
+ Merge2 {
+  inputs 2
+  operation max
+  bbox B
+  name Merge2
+  xpos 560
+  ypos 1019
  }
  Dot {
   name Dot4
   xpos 594
-  ypos 835
+  ypos 1193
  }
-set Ne124c400 [stack 0]
+set Naf0b6000 [stack 0]
+ Expression {
+  inputs 1+1
+  expr0 0
+  expr3 0
+  invert_mask {{!parent.invert_mask}}
+  name MaskAlpha
+  xpos 560
+  ypos 1438
+  disable {{"parent.maskChannelMask == 0"}}
+ }
  Dot {
   name Dot5
   xpos 594
-  ypos 1005
+  ypos 1582
  }
- Input {
-  inputs 0
-  name Inputmask
-  xpos 131
-  ypos 844
-  number 2
- }
- Dot {
-  name Dot12
-  xpos 165
-  ypos 903
- }
-push $Ne124c400
-push $Ne1826000
+push $N938cb400
  Dot {
   name Dot9
   xpos 278
-  ypos 766
+  ypos 1128
  }
-set Ne124d400 [stack 0]
+set Naf0b6c00 [stack 0]
+ Dot {
+  name Dot14
+  xpos 146
+  ypos 1128
+ }
+ Dot {
+  name Dot15
+  xpos 146
+  ypos 1346
+ }
+push $Naf4d5c00
+push $Naf0b6000
+push $Naf0b6c00
  Dot {
   name Dot10
-  xpos 398
-  ypos 766
+  xpos 405
+  ypos 1128
  }
  Grade {
   inputs 1+1
   white {20 1 1 1}
   white_panelDropped true
+  multiply 5
   maskChannelMask rgba.red
   name Grade2
-  xpos 364
-  ypos 832
+  xpos 371
+  ypos 1190
  }
  Dot {
   name Dot11
-  xpos 398
-  ypos 903
+  xpos 405
+  ypos 1261
  }
-push $Ne124d400
+push $Naf0b6c00
  Merge2 {
   inputs 2+1
   operation copy
   maskChannelMask none
+  name MaskMerge
+  xpos 244
+  ypos 1258
+ }
+ Merge2 {
+  inputs 2
+  operation from
+  bbox B
   name Merge1
   xpos 244
-  ypos 900
+  ypos 1343
+  disable {{!parent.only_light}}
  }
-set Ne1270400 [stack 0]
  Copy {
   inputs 2
   from0 rgba.red
   to0 rgba.alpha
   name Copy1
   xpos 244
-  ypos 996
+  ypos 1573
   disable {{!parent.usealpha}}
+ }
+ Switch {
+  inputs 2
+  which 1
+  name Switch2
+  label "Using: \[value which]"
+  xpos 244
+  ypos 1668
+  disable {{!parent.preview_radius}}
  }
  Output {
   name Output1
   xpos 244
-  ypos 1096
- }
-push $Ne1270400
- Viewer {
-  frame_range 1-87
-  fps 12
-  name Viewer1
-  xpos 895
-  ypos 719
+  ypos 1752
  }
 end_group

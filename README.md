@@ -14,5 +14,5 @@ NormalLight - Pelle J Nordentoft\
 Toaster - Markus Ädel
 
 Planned Gizmos:\
-Edge Fixer - Pelle J Nordentoft (a simpler way to Edge Extend alphas)\
+Edge Extend - Pelle J Nordentoft (a simpler way to Edge Extend alphas)\
 Frequency Inpaint (inpaint with the ability to add high-frequency detail from elsewhere)

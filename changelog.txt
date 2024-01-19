@@ -1,3 +1,14 @@
+v0.2.1
+ - Updated NormalLight to v1.1.0
+    - NormalLight's mask now affects the Alpha it outputs.
+    - NormalLight now lets you output the light by itself, without the source image.
+    - NormalLight now lets you extend the light outwards from where it is generated, resulting in softer light.
+    - NormalLight now has a radius slider, affecting how far the light reaches, and a button to preview its reach.
+    - NormalLight no longer uses the entirety of "Luma to Normals" by Erwan Leroy. If you need the control it provides, plug it into NormalLight as custom normals.
+
+v0.2.0
+ - Added NormalLight v1.0.0
+
 v0.1.2
  - Updated Despeckle to v2.0.0, featuring significant performance increases.
 
