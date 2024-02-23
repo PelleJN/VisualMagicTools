@@ -1,3 +1,7 @@
+v0.3.0
+ - Added NukeBake v1.0.0
+ - menu.py will now load the "python" subfolder as a plugin path
+
 v0.2.1
  - Updated NormalLight to v1.1.0
     - NormalLight's mask now affects the Alpha it outputs.
