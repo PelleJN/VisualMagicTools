@@ -15,7 +15,8 @@ toolbar = nuke.toolbar('Nodes')
 vmNode = toolbar.addMenu('Visual Magic', icon = 'vmlogo.png')
 
 #add gizmos
-vmNode.addCommand('AOVEdit', 'nuke.createNode(\"AOVEdit\")')
+vmNode.addCommand('AOVEdit', 'nuke.createNode(\"AOVEdit\")', icon="aovedit.png")
+vmNode.addCommand('ColorToColor', 'nuke.createNode(\"ColorToColor\")', icon="colortocolor.png")
 vmNode.addCommand('Despeckle', 'nuke.createNode(\"Despeckle\")', icon="despeckle.png")
 vmNode.addCommand('DotGrid', 'nuke.createNode(\"DotGrid\")')
 vmNode.addCommand('NoiseBegone', 'nuke.createNode(\"Noise_Begone\")')

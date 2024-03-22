@@ -1,6 +1,16 @@
+v0.4.0
+ - Added ColorToColor v1.0.0
+ - Updated AOVEdit to v1.0.0
+    - No longer has the goal of managing multiple AOVs in one node.
+    - Now has a saturation slider
+    - Now has a mask input and a mix slider (I think it had one of these before but I forgot which)
+ - A bug with NukeBake hs been noted relating to the node sometimes not reading the bake at the intended time. Clicking Live View and Read should fix this for now, but a new version is in the works.
+ - Added some icons
+
 v0.3.0
  - Added NukeBake v1.0.0
  - menu.py will now load the "python" subfolder as a plugin path
+ - Added some icons
 
 v0.2.1
  - Updated NormalLight to v1.1.0
