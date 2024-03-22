@@ -1,10 +1,12 @@
-#! C:/Program Files/Nuke15.0v1/nuke-15.0.1.dll -nx
-version 15.0 v1
+#! C:/Program Files/Nuke15.0v3/nuke-15.0.3.dll -nx
+version 15.0 v3
 Gizmo {
+ inputs 2
  tile_color 0x55bfffff
  label "\[value selectedaov]"
  addUserKnob {20 edits l Edits}
  addUserKnob {41 selectedaov l "Selected AOV" t "The AOV to grade" T GetAOV.in1}
+ addUserKnob {6 isunpremult l "Input is unpremultiplied" t "Check if your input is unpremultiplied to avoid double-unpremultiplication. Wow, what a word." +STARTLINE}
  addUserKnob {26 ""}
  addUserKnob {41 blackpoint T Grade1.blackpoint}
  addUserKnob {41 whitepoint T Grade1.whitepoint}
@@ -13,11 +15,17 @@ Gizmo {
  addUserKnob {41 multiply T Grade1.multiply}
  addUserKnob {41 add l offset T Grade1.add}
  addUserKnob {41 gamma T Grade1.gamma}
+ addUserKnob {41 saturation T Saturation1.saturation}
  addUserKnob {26 ""}
+ addUserKnob {26 "" l mask T ""}
+ addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge5.maskChannelInput}
+ addUserKnob {41 inject -STARTLINE T Merge5.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T Merge5.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T Merge5.fringe}
  addUserKnob {41 mix T Grade1.mix}
  addUserKnob {41 preview1 l "View AOV" T Switch1.disable}
  addUserKnob {20 info l Info}
- addUserKnob {26 infotext l "" +STARTLINE T "<font size=\"6\"><b>AOVEdit</b></font><br>\n<i>v0.0.1</i> <br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\nThe goal of this node is to be a one-stop-shop for your AOV grading needs,<br> letting you add any number of AOVs and grade them indivudually in one node.<br> (if that's even possible idk tbh)"}
+ addUserKnob {26 infotext l "" +STARTLINE T "<font size=\"6\" color=\"#55BFFF\"><b>AOVEdit</b></font><br>\n<i>v1.0.0</i><br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\nEasy grading of an AOV.\n\n<br><br><br><br>\n\nA part of the VIsual Magic toolkit."}
 }
  BackdropNode {
   inputs 0
@@ -28,27 +36,50 @@ Gizmo {
   note_font_size 42
   xpos -692
   ypos -330
-  bdwidth 448
-  bdheight 1065
+  bdwidth 462
+  bdheight 1222
  }
  Input {
   inputs 0
-  name Input
-  xpos -361
-  ypos -368
+  name Inputmask
+  xpos -67
+  ypos 834
+  number 1
+ }
+ Dot {
+  name Dot21
+  xpos -33
+  ypos 952
+ }
+ Input {
+  inputs 0
+  name Inputsrc
+  xpos -191
+  ypos -476
+ }
+ Dot {
+  name Dot19
+  xpos -157
+  ypos -384
+ }
+set Ndc2b2400 [stack 0]
+ Dot {
+  name Dot18
+  xpos -327
+  ypos -384
  }
  Dot {
   name Dot1
   xpos -327
   ypos -250
  }
-set N45a2ec00 [stack 0]
+set Ndc2b2c00 [stack 0]
  Dot {
   name Dot2
   xpos -541
   ypos -250
  }
-set N45a2f000 [stack 0]
+set Ndc2b3000 [stack 0]
  Dot {
   name Dot5
   xpos -639
@@ -57,125 +88,132 @@ set N45a2f000 [stack 0]
  Dot {
   name Dot12
   xpos -639
-  ypos -88
+  ypos -67
  }
-set N45a2f800 [stack 0]
+set Ndc2b3800 [stack 0]
  Dot {
   name Dot6
   xpos -639
-  ypos 587
+  ypos 673
  }
-push $N45a2f800
-push $N45a2f000
+push $Ndc2b3800
+push $Ndc2b3000
  Shuffle2 {
   fromInput1 {{0} B}
   fromInput2 {{0} B}
   name GetAOV
   xpos -575
-  ypos -211
+  ypos -204
  }
+set Ndc2cc000 [stack 0]
  Dot {
   name Dot15
   xpos -541
-  ypos -158
+  ypos -137
  }
-set N45a4c400 [stack 0]
+set Ndc2cc400 [stack 0]
  Copy {
   inputs 2
   from0 rgba.alpha
   to0 rgba.alpha
   name Copy2
   xpos -575
-  ypos -97
+  ypos -76
  }
  Unpremult {
   name Unpremult1
   xpos -575
-  ypos -30
+  ypos -9
  }
  Dot {
   name Dot3
   xpos -541
-  ypos 28
+  ypos 49
  }
-set N45a4d000 [stack 0]
+set Ndc2cd000 [stack 0]
  Grade {
   name Grade1
   xpos -575
-  ypos 72
+  ypos 103
+ }
+ Saturation {
+  name Saturation1
+  xpos -575
+  ypos 151
  }
  Dot {
   name Dot4
   xpos -541
-  ypos 125
+  ypos 211
  }
-set N45a4d800 [stack 0]
-push $N45a4d000
-push $N45a2ec00
+set Ndc2cdc00 [stack 0]
+push $Ndc2cd000
+push $Ndc2b2c00
  Unpremult {
   name Unpremult2
   xpos -361
-  ypos -28
+  ypos -6
+  disable {{parent.isunpremult}}
  }
  Merge2 {
   inputs 2
   operation from
   name Merge1
   xpos -361
-  ypos 25
+  ypos 46
  }
  Merge2 {
   inputs 2
   operation plus
   name Merge2
   xpos -361
-  ypos 122
+  ypos 208
  }
  Dot {
   name Dot9
   xpos -327
-  ypos 189
+  ypos 275
  }
-set N45a7e800 [stack 0]
+set Ndba9ec00 [stack 0]
  Dot {
   name Dot8
   xpos -414
-  ypos 189
+  ypos 275
  }
  Dot {
   name Dot10
   xpos -414
-  ypos 519
+  ypos 617
  }
-push $N45a4c400
+push $Ndc2cc400
  Dot {
   name Dot14
   xpos -455
-  ypos -158
+  ypos -137
  }
  Dot {
   name Dot13
   xpos -455
-  ypos 357
+  ypos 443
  }
-push $N45a4d800
+push $Ndc2cdc00
  Dot {
   name Dot7
   xpos -541
-  ypos 252
+  ypos 338
  }
-push $N45a7e800
+push $Ndba9ec00
  Merge2 {
   inputs 2
   operation copy
   name Merge3
   xpos -361
-  ypos 249
+  ypos 335
  }
  Premult {
   name Premult2
   xpos -361
-  ypos 298
+  ypos 384
  }
  Copy {
   inputs 2
@@ -183,28 +221,28 @@ push $N45a7e800
   to0 rgba.alpha
   name Copy3
   xpos -361
-  ypos 348
+  ypos 434
  }
  Dot {
   name Dot16
   xpos -327
-  ypos 418
+  ypos 504
  }
-set N45a9ec00 [stack 0]
+set Ndbac7000 [stack 0]
  Shuffle2 {
   fromInput1 {{0} B}
   out1 {{{GetAOV.in1}}}
   fromInput2 {{0} B}
   name ReplaceAOV
   xpos -361
-  ypos 471
+  ypos 556
  }
  Merge2 {
   inputs 2
   operation copy
   name Merge4
   xpos -361
-  ypos 516
+  ypos 614
  }
  Copy {
   inputs 2
@@ -212,34 +250,62 @@ set N45a9ec00 [stack 0]
   to0 rgba.alpha
   name Copy1
   xpos -361
-  ypos 578
+  ypos 664
  }
  Premult {
   name Premult1
   xpos -361
-  ypos 637
+  ypos 723
  }
-push $N45a9ec00
+push $Ndbac7000
  Dot {
   name Dot17
   xpos -454
-  ypos 418
+  ypos 504
  }
  Dot {
   name Dot11
   xpos -454
-  ypos 690
+  ypos 776
  }
  Switch {
   inputs 2
   which 1
   name Switch1
   xpos -361
-  ypos 687
+  ypos 773
+ }
+ Unpremult {
+  name Unpremult3
+  xpos -361
+  ypos 841
+  disable {{!parent.isunpremult}}
+ }
+ Dot {
+  name Dot20
+  xpos -327
+  ypos 952
+ }
+push $Ndc2b2400
+ Merge2 {
+  inputs 2+1
+  operation copy
+  bbox B
+  name Merge5
+  xpos -191
+  ypos 949
  }
  Output {
   name Output1
-  xpos -361
-  ypos 768
+  xpos -191
+  ypos 1046
+ }
+push $Ndc2cc000
+ Viewer {
+  frame_range 105-240
+  monitorOutNDISenderName "NukeX - AOVEditGizmo - Viewer1"
+  name Viewer1
+  xpos -52
+  ypos -36
  }
 end_group
