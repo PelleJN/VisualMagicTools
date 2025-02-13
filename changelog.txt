@@ -1,3 +1,10 @@
+v0.4.1
+ - Updated AOVEdit to 1.1.0
+    - Mask input now properly masks only the edits made to the AOV rather than the entire image, which was messing with the "View AOV" option.
+    - The edited AOV can now be replaced by enabling "Overwrite AOV". This was intended to always be the case before but I am stupid and it didn't work. I am now less stupid.
+    - The node is now added as a group instead of a Gizmo, allowing you to open it. This should not affect any other functionality.
+    - Fixed a typo in the info panel where Visual Magic was spelled as VIsual Magic.
+
 v0.4.0
  - Added ColorToColor v1.0.0
  - Updated AOVEdit to v1.0.0
