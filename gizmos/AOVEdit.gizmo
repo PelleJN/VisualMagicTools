@@ -1,7 +1,9 @@
-#! C:/Program Files/Nuke15.0v3/nuke-15.0.3.dll -nx
-version 15.0 v3
-Gizmo {
+#! C:/Program Files/Nuke15.1v5/nuke-15.1.5.dll -nx
+version 15.1 v5
+Group {
+ name AOVEdit
  inputs 2
+ knobChanged ""
  tile_color 0x55bfffff
  label "\[value selectedaov]"
  addUserKnob {20 edits l Edits}
@@ -18,14 +20,15 @@ Gizmo {
  addUserKnob {41 saturation T Saturation1.saturation}
  addUserKnob {26 ""}
  addUserKnob {26 "" l mask T ""}
- addUserKnob {41 maskChannelInput l "" -STARTLINE T Merge5.maskChannelInput}
- addUserKnob {41 inject -STARTLINE T Merge5.inject}
- addUserKnob {41 invert_mask l invert -STARTLINE T Merge5.invert_mask}
- addUserKnob {41 fringe -STARTLINE T Merge5.fringe}
- addUserKnob {41 mix T Grade1.mix}
+ addUserKnob {41 maskChannelMask l "" -STARTLINE T maskMix.maskChannelMask}
+ addUserKnob {41 inject -STARTLINE T maskMix.inject}
+ addUserKnob {41 invert_mask l invert -STARTLINE T maskMix.invert_mask}
+ addUserKnob {41 fringe -STARTLINE T maskMix.fringe}
+ addUserKnob {41 mix T maskMix.mix}
  addUserKnob {41 preview1 l "View AOV" T Switch1.disable}
+ addUserKnob {6 overwrite l "Overwrite AOV" -STARTLINE}
  addUserKnob {20 info l Info}
- addUserKnob {26 infotext l "" +STARTLINE T "<font size=\"6\" color=\"#55BFFF\"><b>AOVEdit</b></font><br>\n<i>v1.0.0</i><br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\nEasy grading of an AOV.\n\n<br><br><br><br>\n\nA part of the VIsual Magic toolkit."}
+ addUserKnob {26 infotext l "" +STARTLINE T "<font size=\"6\" color=\"#55BFFF\"><b>AOVEdit</b></font><br>\n<i>v1.1.0</i><br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\nEasy grading of an AOV.\n\n<br><br><br><br>\n\nA part of the Visual Magic toolkit."}
 }
  BackdropNode {
   inputs 0
@@ -34,22 +37,10 @@ Gizmo {
   gl_color 0x666666ff
   label AOV
   note_font_size 42
-  xpos -692
-  ypos -330
+  xpos -522
+  ypos -364
   bdwidth 462
   bdheight 1222
- }
- Input {
-  inputs 0
-  name Inputmask
-  xpos -67
-  ypos 834
-  number 1
- }
- Dot {
-  name Dot21
-  xpos -33
-  ypos 952
  }
  Input {
   inputs 0
@@ -58,254 +49,285 @@ Gizmo {
   ypos -476
  }
  Dot {
-  name Dot19
-  xpos -157
-  ypos -384
- }
-set Ndc2b2400 [stack 0]
- Dot {
-  name Dot18
-  xpos -327
-  ypos -384
- }
- Dot {
   name Dot1
-  xpos -327
-  ypos -250
+  xpos -157
+  ypos -284
  }
-set Ndc2b2c00 [stack 0]
+set Nb4349400 [stack 0]
  Dot {
   name Dot2
-  xpos -541
-  ypos -250
+  xpos -371
+  ypos -284
  }
-set Ndc2b3000 [stack 0]
+set Nb4349000 [stack 0]
  Dot {
   name Dot5
-  xpos -639
-  ypos -250
+  xpos -469
+  ypos -284
  }
  Dot {
   name Dot12
-  xpos -639
-  ypos -67
+  xpos -469
+  ypos -101
  }
-set Ndc2b3800 [stack 0]
+set Nb4348800 [stack 0]
  Dot {
   name Dot6
-  xpos -639
-  ypos 673
+  xpos -469
+  ypos 639
  }
-push $Ndc2b3800
-push $Ndc2b3000
+ Input {
+  inputs 0
+  name Inputmask
+  xpos 19
+  ypos 135
+  number 1
+  addUserKnob {20 User}
+  addUserKnob {6 check_connection +STARTLINE}
+  check_connection {{"\[exists input1]" x200 0}}
+ }
+push $Nb4348800
+push $Nb4349000
  Shuffle2 {
   fromInput1 {{0} B}
   fromInput2 {{0} B}
   name GetAOV
-  xpos -575
-  ypos -204
+  xpos -405
+  ypos -238
  }
-set Ndc2cc000 [stack 0]
  Dot {
   name Dot15
-  xpos -541
-  ypos -137
+  xpos -371
+  ypos -171
  }
-set Ndc2cc400 [stack 0]
+set Nb174f400 [stack 0]
  Copy {
   inputs 2
   from0 rgba.alpha
   to0 rgba.alpha
   name Copy2
-  xpos -575
-  ypos -76
+  xpos -405
+  ypos -110
  }
  Unpremult {
   name Unpremult1
-  xpos -575
-  ypos -9
+  xpos -405
+  ypos -43
  }
  Dot {
   name Dot3
-  xpos -541
-  ypos 49
+  xpos -371
+  ypos 15
  }
-set Ndc2cd000 [stack 0]
+set N753fbc00 [stack 0]
  Grade {
   name Grade1
-  xpos -575
-  ypos 103
+  xpos -405
+  ypos 52
  }
  Saturation {
   name Saturation1
-  xpos -575
-  ypos 151
+  xpos -405
+  ypos 90
+ }
+push $N753fbc00
+ Dot {
+  name Dot22
+  xpos -443
+  ypos 15
+ }
+ Dot {
+  name Dot23
+  xpos -443
+  ypos 138
+ }
+ Merge2 {
+  inputs 2+1
+  operation copy
+  bbox A
+  name maskMix
+  xpos -405
+  ypos 135
  }
  Dot {
   name Dot4
-  xpos -541
-  ypos 211
+  xpos -371
+  ypos 177
  }
-set Ndc2cdc00 [stack 0]
-push $Ndc2cd000
-push $Ndc2b2c00
+set Na99a1400 [stack 0]
+push $N753fbc00
+push $Nb4349400
  Unpremult {
   name Unpremult2
-  xpos -361
-  ypos -6
+  xpos -191
+  ypos -40
   disable {{parent.isunpremult}}
  }
  Merge2 {
   inputs 2
   operation from
   name Merge1
-  xpos -361
-  ypos 46
+  xpos -191
+  ypos 12
  }
  Merge2 {
   inputs 2
   operation plus
   name Merge2
-  xpos -361
-  ypos 208
+  xpos -191
+  ypos 174
  }
  Dot {
   name Dot9
-  xpos -327
-  ypos 275
+  xpos -157
+  ypos 241
  }
-set Ndba9ec00 [stack 0]
+set Nb2fce800 [stack 0]
  Dot {
   name Dot8
-  xpos -414
-  ypos 275
+  xpos -244
+  ypos 241
  }
  Dot {
   name Dot10
-  xpos -414
-  ypos 617
+  xpos -244
+  ypos 583
  }
-push $Ndc2cc400
+push $Nb174f400
  Dot {
   name Dot14
-  xpos -455
-  ypos -137
+  xpos -285
+  ypos -171
  }
  Dot {
   name Dot13
-  xpos -455
-  ypos 443
+  xpos -285
+  ypos 409
  }
-push $Ndc2cdc00
+push $Na99a1400
  Dot {
   name Dot7
-  xpos -541
-  ypos 338
+  xpos -371
+  ypos 304
  }
-push $Ndba9ec00
+push $Nb2fce800
  Merge2 {
   inputs 2
   operation copy
   name Merge3
-  xpos -361
-  ypos 335
+  xpos -191
+  ypos 301
  }
  Premult {
   name Premult2
-  xpos -361
-  ypos 384
+  xpos -191
+  ypos 350
  }
  Copy {
   inputs 2
   from0 rgba.alpha
   to0 rgba.alpha
   name Copy3
-  xpos -361
-  ypos 434
+  xpos -191
+  ypos 400
  }
- Dot {
-  name Dot16
-  xpos -327
-  ypos 504
- }
-set Ndbac7000 [stack 0]
  Shuffle2 {
   fromInput1 {{0} B}
   out1 {{{GetAOV.in1}}}
   fromInput2 {{0} B}
   name ReplaceAOV
-  xpos -361
-  ypos 556
+  xpos -191
+  ypos 456
+  disable {{!parent.overwrite}}
  }
+ Dot {
+  name Dot16
+  xpos -157
+  ypos 524
+ }
+set N98dae800 [stack 0]
  Merge2 {
   inputs 2
   operation copy
   name Merge4
-  xpos -361
-  ypos 614
+  xpos -191
+  ypos 580
  }
  Copy {
   inputs 2
   from0 rgba.alpha
   to0 rgba.alpha
   name Copy1
-  xpos -361
-  ypos 664
+  xpos -191
+  ypos 630
  }
  Premult {
   name Premult1
-  xpos -361
-  ypos 723
+  xpos -191
+  ypos 694
  }
-push $Ndbac7000
+push $N98dae800
  Dot {
   name Dot17
-  xpos -454
-  ypos 504
+  xpos -284
+  ypos 524
  }
  Dot {
   name Dot11
-  xpos -454
-  ypos 776
+  xpos -284
+  ypos 751
  }
  Switch {
   inputs 2
   which 1
   name Switch1
-  xpos -361
-  ypos 773
+  xpos -191
+  ypos 748
  }
  Unpremult {
   name Unpremult3
-  xpos -361
-  ypos 841
-  disable {{!parent.isunpremult}}
- }
- Dot {
-  name Dot20
-  xpos -327
-  ypos 952
- }
-push $Ndc2b2400
- Merge2 {
-  inputs 2+1
-  operation copy
-  bbox B
-  name Merge5
   xpos -191
-  ypos 949
+  ypos 807
+  disable {{!parent.isunpremult}}
  }
  Output {
   name Output1
   xpos -191
-  ypos 1046
+  ypos 967
  }
-push $Ndc2cc000
- Viewer {
-  frame_range 105-240
-  monitorOutNDISenderName "NukeX - AOVEditGizmo - Viewer1"
-  name Viewer1
-  xpos -52
-  ypos -36
+ Roto {
+  inputs 0
+  output alpha
+  cliptype none
+  curves {{{v x3f99999a}
+  {f 0}
+  {n
+   {layer Root
+    {f 0}
+    {t x44800000 x44428000}
+    {a pt1x 0 pt1y 0 pt2x 0 pt2y 0 pt3x 0 pt3y 0 pt4x 0 pt4y 0 ptex00 0 ptex01 0 ptex02 0 ptex03 0 ptex10 0 ptex11 0 ptex12 0 ptex13 0 ptex20 0 ptex21 0 ptex22 0 ptex23 0 ptex30 0 ptex31 0 ptex32 0 ptex33 0 ptof1x 0 ptof1y 0 ptof2x 0 ptof2y 0 ptof3x 0 ptof3y 0 ptof4x 0 ptof4y 0 pterr 0 ptrefset 0 ptmot x40800000 ptref 0}}}}}
+  toolbox {createBezier {
+  { createBezier str 1 ssx 1 ssy 1 sf 1 sb 1 tt 4 }
+  { createBezierCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createBSpline str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createEllipse str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangle str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { createRectangleCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { brush str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { eraser src 2 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { clone src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { reveal src 3 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { dodge src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { burn src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { blur src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { sharpen src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+  { smear src 1 str 1 ssx 1 ssy 1 sf 1 sb 1 }
+} }
+  toolbar_brush_hardness 0.200000003
+  toolbar_source_transform_scale {1 1}
+  toolbar_source_transform_center {1024 778}
+  name Roto1
+  xpos -652
+  ypos 93
  }
 end_group
