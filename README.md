@@ -10,11 +10,12 @@ Current Gizmos:\
 **ColorToColor** - *Pelle J Nordentoft*\
 **Despeckle** - *Pelle J Nordentoft*\
 **DotGrid** - *Pelle J Nordentoft*\
+**FloodFill** - *Pelle J Nordentoft*\
 **Noise Begone** - *Markus Ädel*\
 **NormalLight** - *Pelle J Nordentoft*\
 **NukeBake** - *Pelle J Nordentoft*\
 **Toaster** - *Markus Ädel*
 
-Planned Gizmos:\
-**Edge Extend** - *Pelle J Nordentoft* (a simpler way to Edge Extend alphas)\
-**Frequency Inpaint** (inpaint with the ability to add high-frequency detail from elsewhere)
+Gizmo Ideas:\
+**Edge Extend** - A simpler way to Edge Extend alphas\
+**Frequency Inpaint** inpaint with the ability to add high-frequency detail from elsewhere

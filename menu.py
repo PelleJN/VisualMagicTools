@@ -1,4 +1,4 @@
-#version 0.3.0
+#version 0.5.0
 
 import nuke
 
@@ -19,6 +19,7 @@ vmNode.addCommand('AOVEdit', 'nuke.createNode(\"AOVEdit\")', icon="aovedit.png")
 vmNode.addCommand('ColorToColor', 'nuke.createNode(\"ColorToColor\")', icon="colortocolor.png")
 vmNode.addCommand('Despeckle', 'nuke.createNode(\"Despeckle\")', icon="despeckle.png")
 vmNode.addCommand('DotGrid', 'nuke.createNode(\"DotGrid\")')
+vmNode.addCommand('FloodFill', 'nuke.createNode(\"FloodFill\")', icon="floodfill.png")
 vmNode.addCommand('NoiseBegone', 'nuke.createNode(\"Noise_Begone\")')
 vmNode.addCommand('NormalLight', 'nuke.createNode(\"NormalLight\")', icon="normallight.png")
 vmNode.addCommand('NukeBake', 'nuke.createNode("NukeBake") if nuke.script_directory() and nuke.script_directory() != "" else nuke.message("Please save your script before trying to use NukeBake!")', icon="nukebake.png") #Only add if script is saved.

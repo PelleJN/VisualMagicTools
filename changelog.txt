@@ -1,3 +1,11 @@
+v0.5.0
+    - Added FloodFill v1.0.0
+       - This node performs the Flood Fill algorithm on the alpha of the provided image, giving you the distance from each pixel to the alpha.
+       - To make it easier to find when searching, the gizmo's name is actually "FloodFill_AlphaDistance".
+    - All nodes are now saved out from Nuke 16.0v1.
+    - All nodes are now Groups by default rather than Gizmos, and have the Disable Group View checkbox ticked since you dont't really need to look inside those very much.
+    - Updated all existing gizmo version numbers to their current version + 0.0.1 (hopefully I didn't miss any)
+
 v0.4.1
  - Updated AOVEdit to 1.1.0
     - Mask input now properly masks only the edits made to the AOV rather than the entire image, which was messing with the "View AOV" option.
