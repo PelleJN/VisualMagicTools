@@ -10,7 +10,7 @@ Current Gizmos:\
 **ColorToColor** - *Pelle J Nordentoft*\
 **Despeckle** - *Pelle J Nordentoft*\
 **DotGrid** - *Pelle J Nordentoft*\
-**FloodFill** - *Pelle J Nordentoft*\
+**JumpFlood** - *Pelle J Nordentoft*\
 **Noise Begone** - *Markus Ädel*\
 **NormalLight** - *Pelle J Nordentoft*\
 **NukeBake** - *Pelle J Nordentoft*\
