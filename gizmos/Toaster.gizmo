@@ -1,13 +1,14 @@
-#! C:/Program Files/Nuke15.0v1/nuke-15.0.1.dll -nx
-version 15.0 v1
-Gizmo {
+#! C:/Program Files/Nuke16.0v1/nuke-16.0.1.dll -nx
+version 16.0 v1
+Group {
+ name Toaster
+ disable_group_view true
  addUserKnob {20 User}
  addUserKnob {3 LevelofToast l "Level of Toast" t "How toasty do you want your meal"}
- LevelofToast {0}
  addUserKnob {26 Airfy l "" +STARTLINE T "<br>1 -> Crispy<br><br>2 -> Crunchy<br><br> 3 -> Croquettes <br><br>4 -> §̶̪̲̣̣̆̅̀̑͜͠h̶̰̜͇̬̺͋̀̐́͠ð̷͚̫͚͇̥̔̈́̽̈́̈́r̷̡̲͓̭̖͊̆̌̌͝ñ̷̠͇̞̅̒̀̽̇͜ͅð̴̧̟̮̹̳́̑̈́̎̆ß̸̡̯̻͎̺̃̃́̕͝¥̶̬̖͓͖̔̅̀͑̓͜l̵̥̙͉̰̈́̌͒͗̄ͅ\n"}
  addUserKnob {20 Info}
  addUserKnob {26 Infoboard l "" +STARTLINE T "Have you ever dreamed about having your<br> very own Toaster? Well dream no more!<br><br>\nJust put the knob to your prefered level of<br>\ntoast and enjoy your meal!"}
- addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 ""}
  addUserKnob {26 text l "" +STARTLINE T "<font size = \".5\"<strong>Product Disclaimer:</strong><br>\nUse of this product is subject to the following safety information:<br>\n1. <strong>Non-Ionizing Technology:</strong> This product employs non-ionizing heat,<br>\nand while no radiation damage is expected, the manufacturer<br>\nis not responsible for any such claims.<br>\n2. <strong>Magnetic Emissions:</strong> A low-level magnetic field may be emitted.<br>\nIndividuals with medical implants should consult healthcare providers prior to use.<br>\n3. <strong>Usage Guidelines:</strong> Follow the recommended guidelines for safe<br>\nand responsible operation as excessive use is not advised.<br>\n4. <strong>Crumb Disposal:</strong> Regular maintenance, including crumb disposal, is advised<br>\nto prevent pest attraction.<br>\n5. <strong>Aroma Notice:</strong> The normal aroma of toasted bread is expected,<br>\nbut if unusual odors occur, cease use immediately and seek professional advice.<br><br>\nThe manufacturer disclaims all liability for injury or damage resulting<br>\nfrom misuse or product malfunction. In the event of adverse effects,<br>\ndiscontinue use immediately and consult medical advice. Use at your own risk.\n\n</font>"}
  addUserKnob {6 IAgree l "I agree" +STARTLINE}
 }
@@ -57,7 +58,7 @@ Gizmo {
  }
  Input {
   inputs 0
-  name Input1
+  name Input
   xpos -27
   ypos -99
  }
@@ -73,31 +74,31 @@ Gizmo {
   xpos 7
   ypos 46
  }
-set N5f4e9c00 [stack 0]
+set Na6eb4c00 [stack 0]
  Dot {
   name Dot7
   xpos 7
   ypos 132
  }
-set N9147d800 [stack 0]
+set Na6eb5000 [stack 0]
  Dot {
   name Dot6
   xpos 242
   ypos 132
  }
-set N82ee9c00 [stack 0]
+set Na6eb5400 [stack 0]
  Dot {
   name Dot20
   xpos 574
   ypos 132
  }
-push $N9147d800
+push $Na6eb5000
  Dot {
   name Dot12
   xpos -248
   ypos 132
  }
-set N9147dc00 [stack 0]
+set Na6eb5c00 [stack 0]
  Dot {
   name Dot19
   xpos -536
@@ -108,8 +109,8 @@ set N9147dc00 [stack 0]
   xpos -550
   ypos 999
  }
-set N96975000 [stack 0]
-push $N5f4e9c00
+set Na6f70400 [stack 0]
+push $Na6eb4c00
  Dot {
   name Dot21
   xpos -700
@@ -138,22 +139,33 @@ push $N5f4e9c00
   font_width_toolbar 100
   font_height_toolbar 100
   message "Please read and accept\n terms of agreement before proceeding"
-  old_message {{80 108 101 97 115 101 32 114 101 97 100 32 97 110 100 32 97 99 99 101 112 116 10 32 116 101 114 109 115 32 111 102 32 97 103 114 101 101 109 101 110 116 32 98 101 102 111 114 101 32 112 114 111 99 101 101 100 105 110 103}
-    }
+  old_message {
+   {80 108 101 97 115 101 32 114 101 97 100 32 97 110 100 32 97 99 99 101 112 116 10 32 116 101 114 109 115 32 111 102 32 97 103 114 101 101 109 101 110 116 32 98 101 102 111 114 101 32 112 114 111 99 101 101 100 105 110 103}
+  }
   box {{width/2} {height/2} {width/2} {height/2}}
   xjustify center
-  transforms {{0 2}
-    }
+  transforms {
+   {0 2}
+  }
   cursor_position 60
   font {{ Cambria : Italic : cambriai.ttf : 0 }}
   center {1024 778}
   cursor_initialised true
   autofit_bbox false
-  initial_cursor_position {{0 1556}
-    }
-  group_animations {{0} imported: 0 selected: items: "root transform/"}
-  animation_layers {{1 11 1024 778 0 0 1 1 0 0 0 0}
-    }
+  initial_cursor_position {
+   {0 1556}
+  }
+  group_animations {
+   {0}
+   imported:
+   0
+   selected:
+   items:
+   "root transform/"
+  }
+  animation_layers {
+   {1 11 1024 778 0 0 1 1 0 0 0 0}
+  }
   name Text2
   xpos -742
   ypos 1072
@@ -172,13 +184,13 @@ push $N5f4e9c00
   xpos -29
   ypos 1217
  }
-push $N82ee9c00
+push $Na6eb5400
  Dot {
   name Dot2
   xpos 242
   ypos 297
  }
-set Nbca32000 [stack 0]
+set Na6f70c00 [stack 0]
  Dot {
   name Dot1
   xpos 352
@@ -204,7 +216,7 @@ set Nbca32000 [stack 0]
   xpos 352
   ypos 429
  }
-push $Nbca32000
+push $Na6f70c00
  Merge2 {
   inputs 2
   operation difference
@@ -224,7 +236,7 @@ push $Nbca32000
   xpos 241
   ypos 531
  }
-set N98522000 [stack 0]
+set Na6f71c00 [stack 0]
  TemporalMedian {
   core 1
   name TemporalMedian1
@@ -236,7 +248,7 @@ set N98522000 [stack 0]
   xpos 362
   ypos 610
  }
-push $N98522000
+push $Na6f71c00
  Merge2 {
   inputs 2
   operation from
@@ -252,7 +264,7 @@ push $N98522000
   xpos 207
   ypos 654
  }
-set N98523000 [stack 0]
+set Na6feaa00 [stack 0]
  Dot {
   name Dot25
   xpos 573
@@ -278,23 +290,22 @@ set N98523000 [stack 0]
   brightness {{int(sin(2*pi*(frame)/24)+1)}}
   saturation 5
   name Glow1
-  selected true
   xpos 540
   ypos 825
  }
-set N779d7000 [stack 0]
+set Na83a4000 [stack 0]
  Dot {
   name Dot32
   xpos 574
   ypos 1195
  }
-push $N98523000
+push $Na6feaa00
  Dot {
   name Dot23
   xpos 241
   ypos 999
  }
-push $N9147d800
+push $Na6eb5000
  Grade {
   blackpoint 0.008
   gamma 1.64
@@ -307,7 +318,7 @@ push $N9147d800
   xpos 6
   ypos 402
  }
-set N82ee8400 [stack 0]
+set Na6ff7400 [stack 0]
  Dot {
   name Dot9
   xpos 101
@@ -326,7 +337,7 @@ set N82ee8400 [stack 0]
   xpos 101
   ypos 534
  }
-push $N82ee8400
+push $Na6ff7400
  Merge2 {
   inputs 2
   operation difference
@@ -342,13 +353,13 @@ push $N82ee8400
   xpos -29
   ypos 586
  }
-push $N9147dc00
+push $Na6eb5c00
  Dot {
   name Dot15
   xpos -248
   ypos 270
  }
-set Nb24ba800 [stack 0]
+set Na83e4000 [stack 0]
  Dot {
   name Dot17
   xpos -172
@@ -366,13 +377,13 @@ set Nb24ba800 [stack 0]
   xpos -172
   ypos 458
  }
-push $Nb24ba800
+push $Na83e4000
  Dot {
   name Dot11
   xpos -248
   ypos 314
  }
-set Nb24bb800 [stack 0]
+set Na83e4c00 [stack 0]
  Blur {
   size 21.5
   name Blur1
@@ -384,7 +395,7 @@ set Nb24bb800 [stack 0]
   xpos -337
   ypos 388
  }
-push $Nb24bb800
+push $Na83e4c00
  Merge2 {
   inputs 2
   operation from
@@ -412,7 +423,7 @@ push $Nb24bb800
   xpos -248
   ypos 745
  }
-push $N96975000
+push $Na6f70400
  Switch {
   inputs 5
   which {{parent.LevelofToast}}
@@ -425,13 +436,12 @@ push $N96975000
   xpos -282
   ypos 1569
  }
-push $N779d7000
+push $Na83a4000
  Viewer {
   frame 1091
   frame_range 1-5000
   translate {-0.621999979 -0.02199999988}
   gauge 0.05877304077
-  monitorOutOutputTransform rec709
   name Viewer1
   xpos 30
   ypos 1558

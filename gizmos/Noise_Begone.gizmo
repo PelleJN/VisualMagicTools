@@ -1,6 +1,8 @@
-#! C:/Program Files/Nuke15.0v1/nuke-15.0.1.dll -nx
-version 15.0 v1
-Gizmo {
+#! C:/Program Files/Nuke16.0v1/nuke-16.0.1.dll -nx
+version 16.0 v1
+Group {
+ name Noise_Begone
+ disable_group_view true
  addUserKnob {20 User}
  addUserKnob {41 analyze l "Analyze Noise" T Denoise1.analyze}
  addUserKnob {41 amount l "Denoise Amount" T Denoise1.amount}
@@ -20,7 +22,7 @@ Gizmo {
  addUserKnob {20 endGroup_1 n -1}
  addUserKnob {20 TempMedian_1 l "Temporal Median" n 1}
  addUserKnob {26 TempMedianInfo l "" +STARTLINE T "<b>OBS:</b> <u>Will cause ghosting on fast moving images.</u><br><br><I>It outputs each pixel by calculating the median of the current frame,<br> the frame before, and the frame after.</i>"}
- addUserKnob {41 TempMedian l Strenght T TemporalMedian1.core}
+ addUserKnob {41 TempMedian l Strength T TemporalMedian1.core}
  addUserKnob {20 endGroup_2 n -1}
 }
  BackdropNode {
@@ -78,7 +80,7 @@ Gizmo {
   xpos 655
   ypos -366
  }
-set Ncedb1000 [stack 0]
+set N33248000 [stack 0]
  VectorGenerator {
   motionEstimation Regularized
   vectorDetailReg 1
@@ -129,19 +131,19 @@ set Ncedb1000 [stack 0]
   xpos 655
   ypos 11
  }
-set Ncedb1c00 [stack 0]
+set N33248400 [stack 0]
  Dot {
   name Dot18
   xpos 482
   ypos 11
  }
-set Nac890000 [stack 0]
+set N33248800 [stack 0]
  Dot {
   name Dot19
   xpos 482
   ypos 119
  }
-push $Nac890000
+push $N33248800
  Dot {
   name Dot14
   xpos 371
@@ -171,7 +173,7 @@ push $Nac890000
   xpos 371
   ypos 499
  }
-push $Ncedb1000
+push $N33248000
  Dot {
   name Dot17
   xpos 1018
@@ -182,22 +184,22 @@ push $Ncedb1000
   name Blur1
   xpos 984
  }
- set Cac8c6000 [stack 0]
+ set C2cb72800 [stack 0]
  TemporalMedian {
   core 0
   name TemporalMedian1
   xpos 986
   ypos 276
  }
- set Cac8c6400 [stack 0]
+ set C2cb72d00 [stack 0]
  Dot {
   name Dot8
   xpos 1018
   ypos 417
  }
-push $Ncedb1c00
-push $Ncedb1c00
-clone $Cac8c6000 {
+push $N33248400
+push $N33248400
+clone $C2cb72800 {
   xpos 870
   ypos 2
   selected false
@@ -228,7 +230,7 @@ clone $Cac8c6000 {
   xpos 621
   ypos 496
  }
-set Nac900000 [stack 0]
+set N3647ea00 [stack 0]
  Sharpen {
   amount 0
   size 4.4
@@ -241,7 +243,7 @@ set Nac900000 [stack 0]
   xpos 655
   ypos 678
  }
-set Nac900400 [stack 0]
+set N34b8a400 [stack 0]
  Blur {
   size 2.8
   name Blur2
@@ -253,13 +255,13 @@ set Nac900400 [stack 0]
   xpos 899
   ypos 799
  }
-push $Nac900400
+push $N34b8a400
  Dot {
   name Dot9
   xpos 655
   ypos 733
  }
-set Nac901000 [stack 0]
+set N34b8ac00 [stack 0]
  Dot {
   name Dot10
   xpos 799
@@ -277,7 +279,7 @@ set Nac901000 [stack 0]
   xpos 799
   ypos 912
  }
-push $Nac901000
+push $N34b8ac00
  Merge2 {
   inputs 2
   operation from
@@ -285,7 +287,7 @@ push $Nac901000
   xpos 621
   ypos 909
  }
-clone $Cac8c6400 {
+clone $C2cb72d00 {
   xpos 622
   ypos 963
   selected false
@@ -295,10 +297,9 @@ clone $Cac8c6400 {
   xpos 621
   ypos 1337
  }
-push $Nac900000
+push $N3647ea00
  Viewer {
   frame_range 1-20
-  monitorOutOutputTransform rec709
   name Viewer1
   xpos 450
   ypos 608

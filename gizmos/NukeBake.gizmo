@@ -1,17 +1,19 @@
-#! C:/Program Files/Nuke15.0v3/nuke-15.0.3.dll -nx
+#! C:/Program Files/Nuke16.0v1/nuke-16.0.1.dll -nx
 #write_info BakerWrite file:"" format:"1920 1080 1" chans:":rgba.red:rgba.green:rgba.blue:rgba.alpha:" framerange:"1 100" fps:"0" colorspace:"linear" datatype:"16 bit half" transfer:"unknown" views:"main" colorManagement:"Nuke"
-version 15.0 v3
-Gizmo {
+version 16.0 v1
+Group {
+ name NukeBake
  onCreate "bkr_tn = nuke.thisNode()\n\ndef bkr_internal_update_filepath():\n    scriptDir = nuke.script_directory()\n    scriptDirName = nuke.scriptName()\n    scriptName = os.path.splitext(os.path.basename(scriptDirName))\[0]\n    pathToRenders = scriptDir+\"/nukebake/\"+scriptName\n    \n    bakename = bkr_tn.knob('bakename').getValue()\n    \n    # Combine render folder with generated name\n    fullFilePath = pathToRenders+\"/\"+bakename+\"/nukebake_\"+scriptName+\"_\"+bakename+\"_v001_####.exr\"\n    \n    # Set file path\n    bkr_tn.knob('file').setValue(fullFilePath)\n    bkr_tn.knob('see_file').setValue(fullFilePath)\n\n\ndef bkr_internal_get_color():\n    colorname = bkr_tn.knob('bakename').getValue().split('_')\[-1]\n    if colorname in bkr_colors_list:\n        colorhex = bkr_colors_dict\[colorname]\n        return colorhex, colorname\n    else:\n        return False\n\n    \n# Used in read node to update \"Displaying\" tag on main node\ndef bkr_internal_update_displaying():\n    newdisplayvalue = \"Error\"\n    if nuke.toNode('BakerSwitch').knob('which').getValue() == 0: # If in passthrough mode\n        newdisplayvalue = \"<b>None</b>\"\n    else:\n        bakename = nuke.thisNode().parent().knob('bakename').getValue()\n        bakenamecolor = bakename.split('_')\[-1] # Get the last part after being split by _\n        if bakenamecolor in bkr_colors_list: #If the color in the name is a valid color\n            color = bkr_colors_dict\[bakenamecolor]\n            newdisplayvalue = \"<b><font color='\"+color+\"'>\"+bakename+\"</font><b>\"\n        else:\n            newdisplayvalue = \"<b>\"+bakename+\"<b>\"\n    nuke.thisNode().parent().knob('txt_showing').setValue(newdisplayvalue)\n    \n\n# Click the Regenerate button to get an initial name, but only if name field is empty\nif bkr_tn.knob('bakename').getValue() == \"\":\n    bkr_tn.knob('button_rename').execute()\n    \n# Click the \"Refresh\" button in the storage tab to generate the existing library.\nbkr_tn.knob('button_refreshStorage').execute()\n\n\n# Make the DWAA / DWAB compression knob into a slider range 0 - 500\n# tn\['dw_compression_local'].setFlag(0x0000000000000002)\n# tn\['dw_compression_local'].setRange(0,500)"
- knobChanged "# Make sure the things that need to refer to this node\nbkr_tn = nuke.thisNode()\n\n# Update full filepath if bakename is updated\nif nuke.thisKnob().name() == \"bakename\":\n    bkr_internal_update_filepath() #defined in onCreate\n    \n    # If there's a valid color at the end of the new name\n    if bkr_internal_get_color() != False:\n        labelcolor = bkr_internal_get_color()\[0] # Get color hex\n        nuke.thisNode().knob('store_color').setValue(labelcolor)\n    else:\n        nuke.thisNode().knob('store_color').setValue(\"#FFFFFF\")\n        \n    # If the name has any rendered file, show \"This name is in use\"\n    if bkr_check_for_file(nuke.thisNode().knob('file').getValue(), \"_\"):\n        nuke.thisNode().knob('txt_inUseNotice').setVisible(True)\n    else:\n        nuke.thisNode().knob('txt_inUseNotice').setVisible(False)"
+ knobChanged "# Make sure the things that need to refer to this node\nbkr_tn = nuke.thisNode()\n\n# Update full filepath if bakename is updated\nif nuke.thisKnob().name() == \"bakename\":\n    # Fallback for display not updating\n    if nuke.toNode('BakerSwitch').knob('which').getValue() == 0: #If in passthrough mode\n        nuke.thisNode().knob('txt_showing').setValue(\"<b>None</b>\")\n    \n    bkr_internal_update_filepath() #defined in onCreate\n    \n    # If there's a valid color at the end of the new name\n    if bkr_internal_get_color() != False:\n        labelcolor = bkr_internal_get_color()\[0] # Get color hex\n        nuke.thisNode().knob('store_color').setValue(labelcolor)\n    else:\n        nuke.thisNode().knob('store_color').setValue(\"#FFFFFF\")\n        \n    # If the name has any rendered file, show \"This name is in use\"\n    if bkr_check_for_file(nuke.thisNode().knob('file').getValue(), \"_\"):\n        nuke.thisNode().knob('txt_inUseNotice').setVisible(True)\n    else:\n        nuke.thisNode().knob('txt_inUseNotice').setVisible(False)\n        \n    # Force BakerSwitch to update so its knobChanger triggers\n    #nuke.toNode('BakerSwitch').knob('testbox').setValue(True)\n    #nuke.toNode('BakerSwitch').knob('testbox').setValue(False)"
  autolabel "\"<center>NukeBake\\n\" + \"<b><font color='\"+nuke.thisNode().knob('store_color').getValue()+\"'>\" + nuke.thisNode().knob('bakename').getValue().replace(\"_\", \"\\n\") + \"</font></b>\""
  tile_color 0x777777ff
+ disable_group_view true
  addUserKnob {20 tab_Baker l Baker}
  addUserKnob {41 channels T BakerWrite.channels}
  addUserKnob {41 file +INVISIBLE T BakerWrite.file}
  addUserKnob {1 see_file l Location t "This is where your bake will be stored. Currently it is not possible to change this location."}
  addUserKnob {1 bakename l "Bake Name" t "The name your bake will use. Can be set to anything, but duplicates will be overwritten."}
- addUserKnob {22 button_rename l Regenerate t "Press to generate a new random name. The generated name will not be one currently in use by NukeBake, so there is no need to worry about duplicates.\nYou can change which names can be generated by editing A FILE IDK WHICH YET" -STARTLINE T "bkr_generated_name = bkr_main_generate_pair()\n\n#set bakename knob value\nbkr_tn.knob('bakename').setValue(bkr_generated_name)"}
+ addUserKnob {22 button_rename l Regenerate t "Press to generate a new random name. The generated name will not be one currently in use by NukeBake, so there is no need to worry about duplicates.\nYou can change which names can be generated by editing A FILE IDK WHICH YET" -STARTLINE T "bkr_generated_name = bkr_main_generate_pair()\n\n#set bakename knob value\nbkr_tn.knob('bakename').setValue(bkr_generated_name)\n\n"}
  addUserKnob {22 button_bake l Bake t "Promts the user for a frame range ane begins rendering, like a normal Write node." T "nuke.toNode(\"BakerWrite\").knob(\"Render\").execute()" +STARTLINE}
  addUserKnob {22 button_read l Read t "Reads from the target location. Useful for if you want to read an already existing bake.\nAlso acts as a reload button." T "# Reload the file\nnuke.toNode('BakerRead').knob(\"reload\").execute()\n\n# Switch to using read over passthrough\nnuke.toNode('BakerSwitch').knob(\"which\").setValue(1)" +STARTLINE}
  addUserKnob {22 button_passthrough l "Live View" t "Switches to passthrough mode, letting you see the input directly instead of reading from the file. If you can see this button, then a file is being read." -STARTLINE +HIDDEN T "#Will be hidden by onKnobChange for the switch, if the switch is already set to 0.\n\n#Set switch to 0\nnuke.toNode('BakerSwitch').knob('which').setValue(0)"}
@@ -86,7 +88,7 @@ Gizmo {
  addUserKnob {22 button_storage_Bob_Green_read l Read +STARTLINE}
  addUserKnob {22 button_storage_Bob_Green_delete l Delete -STARTLINE}
  addUserKnob {20 tab_info l Info}
- addUserKnob {26 txt_info l "" +STARTLINE T "<font size=\"6\" color=\"#55BFFF\"><b>NukeBake</b></font><br>\n<i>v1.0.0</i> <br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\nThis node allows for easy pre-comping.\n\n<br><br>\n\nIt can be as easy as just clicking \"Bake\" and<br>\nusing a pre-generated name, or you can specify<br>\nyour own.\n\n<br><br>\n\nNames and colors are fetched from the 'BKR_NamesAndColors.py' file<br>\nin the toolkit folder, where they can be easily adjusted.<br>\n\n<br><br><br>\n\nA part of the Visual Magic toolkit."}
+ addUserKnob {26 txt_info l "" +STARTLINE T "<font size=\"6\" color=\"#55BFFF\"><b>NukeBake</b></font><br>\n<i>v1.0.1</i> <br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\nThis node allows for easy pre-comping.\n\n<br><br>\n\nIt can be as easy as just clicking \"Bake\" and<br>\nusing a pre-generated name, or you can specify<br>\nyour own.\n\n<br><br>\n\nNames and colors are fetched from the 'BKR_NamesAndColors.py' file<br>\nin the toolkit folder, where they can be easily adjusted.<br>\n\n<br><br><br>\n\nA part of the Visual Magic toolkit."}
 }
  Input {
   inputs 0
@@ -99,7 +101,7 @@ Gizmo {
   xpos 25
   ypos -399
  }
-set Na91a0000 [stack 0]
+set Nce29400 [stack 0]
  Dot {
   name Dot1
   xpos -85
@@ -127,28 +129,31 @@ set Na91a0000 [stack 0]
   file_type exr
   last 100
   origset true
-  version 30
+  version 51
   colorspace linear
   raw {{parent.BakerWrite.raw}}
   name BakerRead
   knobChanged "if nuke.thisKnob().name() == \"file\":\n    bkr_internal_update_displaying()"
   xpos -119
-  ypos -281
+  ypos -282
  }
  Dot {
   name Dot3
   xpos -85
   ypos -149
  }
-push $Na91a0000
+push $Nce29400
  Switch {
   inputs 2
   name BakerSwitch
-  knobChanged "# If using 0, hide Live View button, else reveal it\nif nuke.thisNode().knob('which').getValue() == 0:\n    nuke.thisNode().parent().knob('button_passthrough').setVisible(False)\nelse:\n    nuke.thisNode().parent().knob('button_passthrough').setVisible(True)\n    \nbkr_internal_update_displaying()"
+  knobChanged "bkr_internal_update_displaying()\n\n# If using 0, hide Live View button, else reveal it\nif nuke.thisNode().knob('which').getValue() == 0:\n    nuke.thisNode().parent().knob('button_passthrough').setVisible(False)\nelse:\n    nuke.thisNode().parent().knob('button_passthrough').setVisible(True)\n\n"
   label "Using: \[value which]"
   xpos -9
   ypos -158
   disable {{"(\[python nuke.executing()] == 1) && (parent.ignoreOnRender == 1) ? 1 : 0"}}
+  addUserKnob {20 User}
+  addUserKnob {6 testbox l "" +STARTLINE +STARTLINE}
+  testbox true
  }
  Output {
   name Output

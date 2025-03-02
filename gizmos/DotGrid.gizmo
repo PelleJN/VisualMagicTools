@@ -1,24 +1,26 @@
-#! C:/Program Files/Nuke15.0v1/nuke-15.0.1.dll -nx
-version 15.0 v1
-Gizmo {
+#! C:/Program Files/Nuke16.0v1/nuke-16.0.1.dll -nx
+version 16.0 v1
+Group {
+ name DotGrid
  inputs 0
  tile_color 0x55bfffff
+ disable_group_view true
  addUserKnob {20 DotGrid}
  addUserKnob {41 format l Format T Reformat1.format}
- addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 ""}
  addUserKnob {26 dotlabel l "" +STARTLINE T "X/Y Dots:"}
  addUserKnob {3 horizontal l "" t "Number of Horizontal dots" -STARTLINE}
  horizontal 10
  addUserKnob {3 vertical l "" t "Number of Vertical dots" -STARTLINE}
  vertical 10
  addUserKnob {6 squares l "Force 1:1 Dots" t "This will ignore the number of vertical dots and place them at the same distance they are horizontally.\nThis is likely to cause them to no longer be vertically centered." +STARTLINE}
- addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 ""}
  addUserKnob {7 size l Size t "Size of the dots"}
  size 0.1
  addUserKnob {7 smooth l Smoothness t "Smoothness of the dots"}
  smooth 0.1
  addUserKnob {20 Info}
- addUserKnob {26 infotext l "" +STARTLINE T "<font size=\"6\"><b>DotGrid</b></font><br>\n<i>v1.0.0</i> <br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\nAllows you to generate a bunch of dots"}
+ addUserKnob {26 infotext l "" +STARTLINE T "<font size=\"6\" color=\"#55BFFF\"><b>DotGrid</b></font><br>\n<i>v1.0.1</i> <br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\nAllows you to generate a bunch of dots\n\n<br><br><br><br>\n\nA part of the Visual Magic toolkit."}
 }
  Reformat {
   inputs 0
@@ -38,7 +40,7 @@ Gizmo {
   xpos 589
   ypos 546
  }
-set N82bb5400 [stack 0]
+set N8b3e5c00 [stack 0]
  Expression {
   temp_name0 xmod
   temp_expr0 width/parent.horizontal
@@ -50,7 +52,7 @@ set N82bb5400 [stack 0]
   xpos 555
   ypos 598
  }
-push $N82bb5400
+push $N8b3e5c00
  Dot {
   name Dot2
   xpos 486

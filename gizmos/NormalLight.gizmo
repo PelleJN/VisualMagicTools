@@ -1,10 +1,12 @@
-#! C:/Program Files/Nuke15.0v1/nuke-15.0.1.dll -nx
-version 15.0 v1
-Gizmo {
+#! C:/Program Files/Nuke16.0v1/nuke-16.0.1.dll -nx
+version 16.0 v1
+Group {
+ name NormalLight
  inputs 3
- onCreate "n = nuke.thisNode()\nw = n.format().width() / 2\nh = n.format().height() / 2\n\ncenter = \[w, h]\n\nif n.knob('create').value() == False:\n    n.knob('lightpos').setValue(center)\n    n.knob('create').setValue(1)\n\n\n\n"
+ onCreate "n = nuke.thisNode()\nw = n.format().width()/2\nh = n.format().height()/2\n\ncenter = \[w,h]    \n\nif n.knob('create').value()==False:\n    n.knob('lightpos').setValue(center)\n    n.knob('create').setValue(1)\n"
  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() == \"follow_aspect\" and k.value() == 1:\n    n\[\"radius_source\"].setEnabled(False)\nelse:\n    n\[\"radius_source\"].setEnabled(True)"
  tile_color 0x55bfffff
+ disable_group_view true
  addUserKnob {20 User}
  addUserKnob {41 lightpos l "Light Position" T DISTANCE.lightpos}
  addUserKnob {6 customnormals l "Use Custom Normals" +STARTLINE}
@@ -62,7 +64,7 @@ Gizmo {
  addUserKnob {6 create +INVISIBLE +STARTLINE}
  create true
  addUserKnob {20 info l Info}
- addUserKnob {26 infotext l "" +STARTLINE T "<font size=\"6\"><b>NormalLight</b></font><br>\n<i>v1.1.0</i> <br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\nThis node allows you to grade parts of an\nimage<br>\nwhose \"normals\" are aimed towards a specified position.<br>\n\n<br><br><br>\n\nUses  parts of <a href=\"http://www.nukepedia.com/toolsets/other/vectortools/\" style=\"color:gray;\">Luma_to_Normals</a> by Erwan Leroy."}
+ addUserKnob {26 infotext l "" +STARTLINE T "<font size=\"6\" color=\"#55BFFF\"><b>NormalLight</b></font><br>\n<i>v1.1.1</i> <br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\nThis node allows you to grade parts of an\nimage<br>\nwhose \"normals\" are aimed towards a specified position.<br>\n\n<br><br><br>\n\nUses  parts of <a href=\"http://www.nukepedia.com/toolsets/other/vectortools/\" style=\"color:gray;\">Luma_to_Normals</a> by Erwan Leroy.<br>\nA part of the Visual Magic toolkit."}
 }
  BackdropNode {
   inputs 0
@@ -86,13 +88,13 @@ Gizmo {
   xpos 278
   ypos -513
  }
-set N938cb400 [stack 0]
+set Nab63a000 [stack 0]
  Dot {
   name Dot2
   xpos 594
   ypos -513
  }
-set N938cb800 [stack 0]
+set Nab63a400 [stack 0]
  Dot {
   name Dot3
   xpos 1014
@@ -152,13 +154,13 @@ set N938cb800 [stack 0]
   xpos 1014
   ypos 511
  }
-set Naf5d9400 [stack 0]
+set Nab63ac00 [stack 0]
  Dot {
   name Dot22
   xpos 901
   ypos 511
  }
-set Naf5d9800 [stack 0]
+set Nab63b000 [stack 0]
  Expression {
   temp_name0 inner
   temp_expr0 lerp(parent.radius-0.001,0,parent.radius_feather)
@@ -174,7 +176,7 @@ set Naf5d9800 [stack 0]
   xpos 901
   ypos 638
  }
-push $Naf5d9400
+push $Nab63ac00
  Expression {
   temp_name0 inner
   temp_expr0 parent.triminner/10
@@ -201,7 +203,7 @@ push $Naf5d9400
   xpos 1014
   ypos 697
  }
-set Naf4d4c00 [stack 0]
+set Nab63b800 [stack 0]
  Expression {
   expr0 a
   expr1 a
@@ -228,14 +230,14 @@ set Naf4d4c00 [stack 0]
   xpos 45
   ypos 1261
  }
-set Naf4d5c00 [stack 0]
+set Na0788000 [stack 0]
  Dot {
   name Dot13
   xpos 45
   ypos 1441
  }
-push $Naf4d4c00
-push $Naf5d9800
+push $Nab63b800
+push $Nab63b000
  Input {
   inputs 0
   name Inputnormals
@@ -248,7 +250,7 @@ push $Naf5d9800
   xpos 460
   ypos 407
  }
-push $N938cb800
+push $Nab63a400
  Saturation {
   saturation 0
   name Desaturate
@@ -274,7 +276,7 @@ push $N938cb800
   xpos 594
   ypos -138
  }
-set Naf387800 [stack 0]
+set Na0788c00 [stack 0]
  Dot {
   name Dot20
   xpos 704
@@ -282,10 +284,11 @@ set Naf387800 [stack 0]
  }
  Matrix {
   matrix {
-      {-2 -1 -2}
-      {0 0 0}
-      {2 1 2}
-    }
+   
+       {-2 -1 -2}
+       {0 0 0}
+       {2 1 2}
+  }
   name MatrixVertical
   xpos 670
   ypos -90
@@ -295,21 +298,30 @@ set Naf387800 [stack 0]
   xpos 704
   ypos -12
  }
-push $Naf387800
+push $Na0788c00
  Matrix {
   matrix {
-      {2 0 -2}
-      {1 0 -1}
-      {2 0 -2}
-    }
+   
+       {2 0 -2}
+       {1 0 -1}
+       {2 0 -2}
+  }
   name MatrixHorizontal
   xpos 560
   ypos -89
  }
  Shuffle2 {
   inputs 2
-  fromInput1 {{0} B A}
-  fromInput2 {{1} B A}
+  fromInput1 {
+   {0}
+   B
+   A
+  }
+  fromInput2 {
+   {1}
+   B
+   A
+  }
   in2 rgb
   mappings "4 rgba.red 0 0 rgba.red 0 0 rgba.green 1 1 rgba.green 0 1 black -1 -1 rgba.blue 0 2 black -1 -1 rgba.alpha 0 3"
   name Shuffle_G_Into_B
@@ -410,7 +422,7 @@ push $Naf387800
    xpos 34
    ypos 108
   }
-set Naf22bc00 [stack 0]
+set Na0789c00 [stack 0]
   Shuffle {
    name vector_layer
    xpos 140
@@ -440,7 +452,7 @@ set Naf22bc00 [stack 0]
    xpos 174
    ypos 364
   }
-push $Naf22bc00
+push $Na0789c00
   ShuffleCopy {
    inputs 2
    in2 none
@@ -449,7 +461,6 @@ push $Naf22bc00
    blue blue
    out {{{parent.vector_layer.in}}}
    name ShuffleCopy1
-   selected true
    xpos 0
    ypos 360
   }
@@ -482,7 +493,7 @@ push $Naf22bc00
   xpos 594
   ypos 834
  }
-set Naf288400 [stack 0]
+set Na083c800 [stack 0]
  Dot {
   name Dot16
   xpos 501
@@ -493,7 +504,7 @@ set Naf288400 [stack 0]
   xpos 501
   ypos 1022
  }
-push $Naf288400
+push $Na083c800
  Crop {
   box {{bbox.x} {bbox.y} {bbox.w+bbox.x} {bbox.h+bbox.y}}
   crop false
@@ -530,7 +541,7 @@ push $Naf288400
   xpos 594
   ypos 1193
  }
-set Naf0b6000 [stack 0]
+set Na083d400 [stack 0]
  Expression {
   inputs 1+1
   expr0 0
@@ -546,13 +557,13 @@ set Naf0b6000 [stack 0]
   xpos 594
   ypos 1582
  }
-push $N938cb400
+push $Nab63a000
  Dot {
   name Dot9
   xpos 278
   ypos 1128
  }
-set Naf0b6c00 [stack 0]
+set Na083dc00 [stack 0]
  Dot {
   name Dot14
   xpos 146
@@ -563,9 +574,9 @@ set Naf0b6c00 [stack 0]
   xpos 146
   ypos 1346
  }
-push $Naf4d5c00
-push $Naf0b6000
-push $Naf0b6c00
+push $Na0788000
+push $Na083d400
+push $Na083dc00
  Dot {
   name Dot10
   xpos 405
@@ -586,7 +597,7 @@ push $Naf0b6c00
   xpos 405
   ypos 1261
  }
-push $Naf0b6c00
+push $Na083dc00
  Merge2 {
   inputs 2+1
   operation copy

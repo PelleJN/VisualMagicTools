@@ -1,7 +1,9 @@
-#! C:/Program Files/Nuke15.0v1/nuke-15.0.1.dll -nx
-version 15.0 v1
-Gizmo {
+#! C:/Program Files/Nuke16.0v1/nuke-16.0.1.dll -nx
+version 16.0 v1
+Group {
+ name Despeckle
  tile_color 0x55bfffff
+ disable_group_view true
  addUserKnob {20 despeckle l Despeckle}
  addUserKnob {68 mathtype l "Value Math" t "\n<b>Max Value</b> - Considers only the brightest of R, G and B.<br>\n<b>Luma</b> - Considers the luminance (based on rec.709)" M {"Max Value" Luma "" ""}}
  addUserKnob {7 valthresh l "Value Threshold" t "The minimum value a pixel has to be in order to be removed." R 0 2}
@@ -16,7 +18,7 @@ Gizmo {
  addUserKnob {26 ""}
  addUserKnob {6 alphafireflies l "Fireflies in Alpha" t "Replaces the alpha with a mask of the pixels that were affected." +STARTLINE}
  addUserKnob {20 info l Info}
- addUserKnob {26 infotext l "" +STARTLINE T "<font size=\"6\"><b>Despeckle</b></font><br>\n<i>v2.0.0</i> <br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\nThis node compares pixels to neighboring ones.<br>\nIf a pixel is bright but does not have bright neighbors,<br>\nit is deemed to be a firefly and removed."}
+ addUserKnob {26 infotext l "" +STARTLINE T "<font size=\"6\" color=\"#55BFFF\"><b>Despeckle</b></font><br>\n<i>v2.0.1</i><br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\nThis node compares pixels to neighboring ones.<br>\nIf a pixel is bright but does not have bright neighbors,<br>\nit is deemed to be a firefly and removed.\n\n<br><br><br><br>\n\nA part of the Visual Magic toolkit."}
 }
  Input {
   inputs 0
@@ -29,25 +31,25 @@ Gizmo {
   xpos -1025
   ypos 316
  }
-set N3dd4b000 [stack 0]
+set N20dec800 [stack 0]
  Dot {
   name Dot62
   xpos -771
   ypos 316
  }
-set N32738000 [stack 0]
+set N20decc00 [stack 0]
  Dot {
   name Dot61
   xpos -771
   ypos 1885
  }
-push $N3dd4b000
+push $N20dec800
  Dot {
   name Dot51
   xpos -1266
   ypos 316
  }
-set N3278f800 [stack 0]
+set N20ded400 [stack 0]
  Saturation {
   saturation 0
   name Saturation1
@@ -59,7 +61,7 @@ set N3278f800 [stack 0]
   xpos -1266
   ypos 445
  }
-push $N3278f800
+push $N20ded400
  Dot {
   name Dot50
   xpos -1385
@@ -97,14 +99,15 @@ push $N3278f800
   xpos -1385
   ypos 678
  }
-set N23696400 [stack 0]
+set N20ebe000 [stack 0]
  Matrix {
   channels rgb
   matrix {
-      {1 1 1}
-      {1 0 1}
-      {1 1 1}
-    }
+   
+       {1 1 1}
+       {1 0 1}
+       {1 1 1}
+  }
   name Matrix9
   xpos -1419
   ypos 769
@@ -114,7 +117,7 @@ set N23696400 [stack 0]
   xpos -1385
   ypos 845
  }
-push $N23696400
+push $N20ebe000
  Dot {
   name Dot42
   xpos -1210
@@ -156,7 +159,7 @@ push $N23696400
   xpos -1210
   ypos 1029
  }
-push $N3dd4b000
+push $N20dec800
  Copy {
   inputs 2
   from0 rgba.alpha
@@ -176,13 +179,13 @@ push $N3dd4b000
   xpos -1025
   ypos 1210
  }
-set N32745800 [stack 0]
+set N20ebf400 [stack 0]
  Dot {
   name Dot54
   xpos -1196
   ypos 1210
  }
-set N32736800 [stack 0]
+set N20ebf800 [stack 0]
  Dot {
   name Dot1
   xpos -1328
@@ -193,7 +196,7 @@ set N32736800 [stack 0]
   xpos -1328
   ypos 1806
  }
-push $N32736800
+push $N20ebf800
  Expression {
   expr0 "max(r, g, b)"
   expr1 "max(r, g, b)"
@@ -222,7 +225,7 @@ push $N32736800
   ypos 1354
  }
  Grade {
-  channels {rgba.red -rgba.green -rgba.blue}
+  channels {rgba.red -rgba.green -rgba.blue none}
   whitepoint 0.5
   name Grade3
   xpos -1230
@@ -233,13 +236,13 @@ push $N32736800
   xpos -1196
   ypos 1485
  }
-set N3cb5f800 [stack 0]
+set N20f12400 [stack 0]
  Dot {
   name Dot58
   xpos -1196
   ypos 1610
  }
-push $N32738000
+push $N20decc00
  Dot {
   name Dot55
   xpos -674
@@ -250,16 +253,16 @@ push $N32738000
   xpos -674
   ypos 1485
  }
-set N3cb5e800 [stack 0]
+set N20f13000 [stack 0]
  Expression {
   expr3 0
   name Expression2
   xpos -708
   ypos 1607
  }
-push $N3cb5f800
-push $N3cb5e800
-push $N32745800
+push $N20f12400
+push $N20f13000
+push $N20ebf400
  Keymix {
   inputs 3
   channels rgba

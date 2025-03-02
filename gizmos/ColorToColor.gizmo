@@ -1,8 +1,10 @@
-#! C:/Program Files/Nuke15.0v3/nuke-15.0.3.dll -nx
-version 15.0 v3
-Gizmo {
+#! C:/Program Files/Nuke16.0v1/nuke-16.0.1.dll -nx
+version 16.0 v1
+Group {
+ name ColorToColor
  inputs 2
  tile_color 0x55bfffff
+ disable_group_view true
  addUserKnob {20 ColorToColor}
  addUserKnob {18 fromcolor l "From This Color:" t "The color in your original image that you want to change into another. Colorpicking highly recommended. "}
  fromcolor {1 1 1}
@@ -12,13 +14,15 @@ Gizmo {
  addUserKnob {6 tocolor_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {18 fromblack l "From This Blackpoint:" t "The blackpoint that you want to change into another. Colorpicking highly recommended.\nOften best left at 0."}
  fromblack {0 0 0}
+ addUserKnob {6 fromblack_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {6 color_rgb_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {18 toblack l "To This Blackpoint:" t "The color you want the from-blackpoint to become.\nOften best left at 0."}
  toblack {0 0 0}
+ addUserKnob {6 toblack_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {6 color_rgb_1_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {6 ignoreval l "Ignore Value" t "Ignores the value adjustments completely" +STARTLINE}
  addUserKnob {6 ignorecol l "Ignore Chroma" t "Ignores the chroma adjustments completely" +STARTLINE}
- addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 ""}
  addUserKnob {41 valmix l "value mix" t "Mixes the influence of the new value" T Value.mix}
  addUserKnob {41 colmix l "chroma mix" t "Mixes the influence of the new chroma" T Color.mix}
  addUserKnob {26 "" l mask T ""}
@@ -28,7 +32,7 @@ Gizmo {
  addUserKnob {41 fringe -STARTLINE T Master.fringe}
  addUserKnob {41 mix T Master.mix}
  addUserKnob {20 info l Info}
- addUserKnob {26 txt_info l "" +STARTLINE T "<font size=\"6\" color=\"#55BFFF\"><b>ColorToColor</b></font><br>\n<i>v1.0.0</i> <br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\nThis simple node changes one color into another.<br>\nUseful for matching colors that you know should be the same, but aren't.\n\n<br><br><br><br>\n\nA part of the Visual Magic toolkit."}
+ addUserKnob {26 txt_info l "" +STARTLINE T "<font size=\"6\" color=\"#55BFFF\"><b>ColorToColor</b></font><br>\n<i>v1.0.1</i> <br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\nThis simple node changes one color into another.<br>\nUseful for matching colors that you know should be the same, but aren't.\n\n<br><br><br><br>\n\nA part of the Visual Magic toolkit."}
 }
  Input {
   inputs 0
@@ -53,7 +57,7 @@ Gizmo {
   xpos 21
   ypos -431
  }
-set Nffe0c800 [stack 0]
+set N8953b400 [stack 0]
  Grade {
   blackpoint {{parent.fromblack.r} {parent.fromblack.g} {parent.fromblack.b} 0}
   whitepoint {{parent.fromcolor.r} {parent.fromcolor.g} {parent.fromcolor.b} 1}
@@ -76,7 +80,7 @@ set Nffe0c800 [stack 0]
   xpos 21
   ypos -259
  }
-set N45e96000 [stack 0]
+set N8953b800 [stack 0]
  Dot {
   name Dot17
   xpos -176
@@ -87,20 +91,20 @@ set N45e96000 [stack 0]
   xpos -176
   ypos -56
  }
-push $N45e96000
+push $N8953b800
  Saturation {
   saturation 0
   name Desaturate
   xpos -13
   ypos -218
  }
- set C1fbb3800 [stack 0]
+ set C9d4e5e00 [stack 0]
  Dot {
   name Dot19
   xpos 21
   ypos -110
  }
-set N45e97000 [stack 0]
+set N9d4f8400 [stack 0]
  Dot {
   name Dot20
   xpos -81
@@ -114,8 +118,8 @@ set N45e97000 [stack 0]
   xpos -115
   ypos -59
  }
- set C1fbb3400 [stack 0]
-push $Nffe0c800
+ set C9d4e6300 [stack 0]
+push $N8953b400
  Dot {
   name Dot12
   xpos -288
@@ -126,7 +130,7 @@ push $Nffe0c800
   xpos -288
   ypos -256
  }
-set N2a63c800 [stack 0]
+set N9d4f9000 [stack 0]
  Dot {
   name Dot10
   xpos -485
@@ -137,8 +141,8 @@ set N2a63c800 [stack 0]
   xpos -485
   ypos -116
  }
-push $N2a63c800
-clone $C1fbb3800 {
+push $N9d4f9000
+clone $C9d4e5e00 {
   xpos -322
   ypos -220
   selected false
@@ -148,13 +152,13 @@ clone $C1fbb3800 {
   xpos -288
   ypos -162
  }
-set N2a63dc00 [stack 0]
+set N9d4f9c00 [stack 0]
  Dot {
   name Dot13
   xpos -390
   ypos -162
  }
-clone $C1fbb3400 {
+clone $C9d4e6300 {
   inputs 2
   xpos -424
   ypos -119
@@ -165,7 +169,7 @@ clone $C1fbb3400 {
   xpos -390
   ypos 79
  }
-set N46045000 [stack 0]
+set N9d52e400 [stack 0]
  Merge2 {
   inputs 2
   operation copy
@@ -180,14 +184,14 @@ set N46045000 [stack 0]
   xpos -81
   ypos 173
  }
-push $N45e97000
-push $N2a63dc00
+push $N9d4f8400
+push $N9d4f9c00
  Dot {
   name Dot25
   xpos -288
   ypos 10
  }
-set N4e0abc00 [stack 0]
+set N9d52ec00 [stack 0]
  Merge2 {
   inputs 2
   operation copy
@@ -205,15 +209,15 @@ set N4e0abc00 [stack 0]
   xpos -13
   ypos 170
  }
- set C2a63d400 [stack 0]
-push $N46045000
+ set C9d554000 [stack 0]
+push $N9d52e400
  Dot {
   name Dot15
   xpos -390
   ypos 171
  }
-push $N4e0abc00
-clone $C2a63d400 {
+push $N9d52ec00
+clone $C9d554000 {
   inputs 2
   xpos -322
   ypos 168
@@ -232,7 +236,7 @@ clone $C2a63d400 {
   xpos -13
   ypos 246
  }
-set N46045400 [stack 0]
+set N9d554a00 [stack 0]
  Viewer {
   frame_range 1-82
   colour_sample_bbox {-0.4812499881 -0.3143750131 -0.4518750012 -0.2837499976}
@@ -242,7 +246,7 @@ set N46045400 [stack 0]
   xpos -1100
   ypos 400
  }
-push $N46045400
+push $N9d554a00
  Output {
   name Output
   xpos -13
