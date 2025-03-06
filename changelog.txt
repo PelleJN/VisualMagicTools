@@ -1,27 +1,36 @@
+vMAJOR.NEWGIZMO.UPDATEDGIZMO
+
+v0.6.0
+ - Added SimpleDistort v1.0.0
+     - This node performs a very simple distortion of the image using fbm noise added to an ST map.
+ - The JumpFlood node is now listed as "JumpFlood_AlphaDistance" in the search menu, as was intended. It will still be added simply called "JumpFlood".
+ - NukeBake and NormalLight have turned back to Gizmos from Groups, since they were using onCreate callbacks that were not working on groups.
+ - Reformatted some entries in the changelog file.
+
 v0.5.1
-    - Removed FloodFill in favor of JumpFlood. FloodFill is not the name of the algorithm. I don't know when I started calling it that.
+ - Removed FloodFill in favor of JumpFlood. FloodFill is not the name of the algorithm. I don't know when I started calling it that.
 
 v0.5.0
-    - Added FloodFill v1.0.0
-       - This node performs the Flood Fill algorithm on the alpha of the provided image, giving you the distance from each pixel to the alpha.
-       - To make it easier to find when searching, the gizmo's name is actually "FloodFill_AlphaDistance".
-    - All nodes are now saved out from Nuke 16.0v1.
-    - All nodes are now Groups by default rather than Gizmos, and have the Disable Group View checkbox ticked since you dont't really need to look inside those very much.
-    - Updated all existing gizmo version numbers to their current version + 0.0.1 (hopefully I didn't miss any)
+ - Added FloodFill v1.0.0
+     - This node performs the Flood Fill algorithm on the alpha of the provided image, giving you the distance from each pixel to the alpha.
+     - To make it easier to find when searching, the gizmo's name is actually "FloodFill_AlphaDistance".
+ - All nodes are now saved out from Nuke 16.0v1.
+ - All nodes are now Groups by default rather than Gizmos, and have the Disable Group View checkbox ticked since you dont't really need to look inside those very much.
+ - Updated all existing gizmo version numbers to their current version + 0.0.1 (hopefully I didn't miss any)
 
 v0.4.1
  - Updated AOVEdit to 1.1.0
-    - Mask input now properly masks only the edits made to the AOV rather than the entire image, which was messing with the "View AOV" option.
-    - The edited AOV can now be replaced by enabling "Overwrite AOV". This was intended to always be the case before but I am stupid and it didn't work. I am now less stupid.
-    - The node is now added as a group instead of a Gizmo, allowing you to open it. This should not affect any other functionality.
-    - Fixed a typo in the info panel where Visual Magic was spelled as VIsual Magic.
+     - Mask input now properly masks only the edits made to the AOV rather than the entire image, which was messing with the "View AOV" option.
+     - The edited AOV can now be replaced by enabling "Overwrite AOV". This was intended to always be the case before but I am stupid and it didn't work. I am now less stupid.
+     - The node is now added as a group instead of a Gizmo, allowing you to open it. This should not affect any other functionality.
+     - Fixed a typo in the info panel where Visual Magic was spelled as VIsual Magic.
 
 v0.4.0
  - Added ColorToColor v1.0.0
  - Updated AOVEdit to v1.0.0
-    - No longer has the goal of managing multiple AOVs in one node.
-    - Now has a saturation slider
-    - Now has a mask input and a mix slider (I think it had one of these before but I forgot which)
+     - No longer has the goal of managing multiple AOVs in one node.
+     - Now has a saturation slider
+     - Now has a mask input and a mix slider (I think it had one of these before but I forgot which)
  - A bug with NukeBake hs been noted relating to the node sometimes not reading the bake at the intended time. Clicking Live View and Read should fix this for now, but a new version is in the works.
  - Added some icons
 
@@ -32,11 +41,11 @@ v0.3.0
 
 v0.2.1
  - Updated NormalLight to v1.1.0
-    - NormalLight's mask now affects the Alpha it outputs.
-    - NormalLight now lets you output the light by itself, without the source image.
-    - NormalLight now lets you extend the light outwards from where it is generated, resulting in softer light.
-    - NormalLight now has a radius slider, affecting how far the light reaches, and a button to preview its reach.
-    - NormalLight no longer uses the entirety of "Luma to Normals" by Erwan Leroy. If you need the control it provides, plug it into NormalLight as custom normals.
+     - NormalLight's mask now affects the Alpha it outputs.
+     - NormalLight now lets you output the light by itself, without the source image.
+     - NormalLight now lets you extend the light outwards from where it is generated, resulting in softer light.
+     - NormalLight now has a radius slider, affecting how far the light reaches, and a button to preview its reach.
+     - NormalLight no longer uses the entirety of "Luma to Normals" by Erwan Leroy. If you need the control it provides, plug it into NormalLight as custom normals.
 
 v0.2.0
  - Added NormalLight v1.0.0
@@ -60,4 +69,3 @@ v0.0.1
  - Added Noise Begone v0.0.1
 
 
-vMAJOR.NEWGIZMO.UPDATEDGIZMO

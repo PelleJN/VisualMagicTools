@@ -1,4 +1,4 @@
-#version 0.5.1
+#version 0.6.0
 
 import nuke
 
@@ -19,11 +19,11 @@ vmNode.addCommand('AOVEdit', 'nuke.createNode(\"AOVEdit\")', icon="aovedit.png")
 vmNode.addCommand('ColorToColor', 'nuke.createNode(\"ColorToColor\")', icon="colortocolor.png")
 vmNode.addCommand('Despeckle', 'nuke.createNode(\"Despeckle\")', icon="despeckle.png")
 vmNode.addCommand('DotGrid', 'nuke.createNode(\"DotGrid\")')
-vmNode.addCommand('JumpFlood', 'nuke.createNode(\"JumpFlood\")', icon="jumpflood.png")
+vmNode.addCommand('JumpFlood_AlphaDistance', 'nuke.createNode(\"JumpFlood\")', icon="jumpflood.png")
 vmNode.addCommand('NoiseBegone', 'nuke.createNode(\"Noise_Begone\")')
 vmNode.addCommand('NormalLight', 'nuke.createNode(\"NormalLight\")', icon="normallight.png")
 vmNode.addCommand('NukeBake', 'nuke.createNode("NukeBake") if nuke.script_directory() and nuke.script_directory() != "" else nuke.message("Please save your script before trying to use NukeBake!")', icon="nukebake.png") #Only add if script is saved.
+vmNode.addCommand('SimpleDistort', 'nuke.createNode(\"SimpleDistort\")', icon="simpledistort.png")
 vmNode.addCommand('Toaster', 'nuke.createNode(\"Toaster\")')
 
 print("Visual Magic Toolkit Successfully Loaded")
-
