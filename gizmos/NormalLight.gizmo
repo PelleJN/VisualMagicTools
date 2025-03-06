@@ -61,7 +61,7 @@ Gizmo {
  addUserKnob {6 usealpha l "Mask in Alpha" +STARTLINE}
  usealpha true
  addUserKnob {6 create +INVISIBLE +STARTLINE}
- create true
+ create false
  addUserKnob {20 info l Info}
  addUserKnob {26 infotext l "" +STARTLINE T "<font size=\"6\" color=\"#55BFFF\"><b>NormalLight</b></font><br>\n<i>v1.1.1</i> <br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\nThis node allows you to grade parts of an\nimage<br>\nwhose \"normals\" are aimed towards a specified position.<br>\n\n<br><br><br>\n\nUses  parts of <a href=\"http://www.nukepedia.com/toolsets/other/vectortools/\" style=\"color:gray;\">Luma_to_Normals</a> by Erwan Leroy.<br>\nA part of the Visual Magic toolkit."}
 }
