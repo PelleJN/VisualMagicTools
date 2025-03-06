@@ -14,6 +14,7 @@ Current Gizmos:\
 **Noise Begone** - *Markus Ädel*\
 **NormalLight** - *Pelle J Nordentoft*\
 **NukeBake** - *Pelle J Nordentoft*\
+**SimpleDistort** - *Pelle J Nordentoft*\
 **Toaster** - *Markus Ädel*
 
 Gizmo Ideas:\
