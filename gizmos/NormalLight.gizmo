@@ -1,12 +1,11 @@
 #! C:/Program Files/Nuke16.0v1/nuke-16.0.1.dll -nx
 version 16.0 v1
-Group {
+Gizmo {
  name NormalLight
  inputs 3
  onCreate "n = nuke.thisNode()\nw = n.format().width()/2\nh = n.format().height()/2\n\ncenter = \[w,h]    \n\nif n.knob('create').value()==False:\n    n.knob('lightpos').setValue(center)\n    n.knob('create').setValue(1)\n"
  knobChanged "n = nuke.thisNode()\nk = nuke.thisKnob()\nif k.name() == \"follow_aspect\" and k.value() == 1:\n    n\[\"radius_source\"].setEnabled(False)\nelse:\n    n\[\"radius_source\"].setEnabled(True)"
  tile_color 0x55bfffff
- disable_group_view true
  addUserKnob {20 User}
  addUserKnob {41 lightpos l "Light Position" T DISTANCE.lightpos}
  addUserKnob {6 customnormals l "Use Custom Normals" +STARTLINE}

@@ -1,10 +1,10 @@
 #! C:/Program Files/Nuke16.0v1/nuke-16.0.1.dll -nx
 version 16.0 v1
 Group {
- name JumpFlood_AlphaDistance
- updateUI jumpFloodUiUpdate()
- tile_color 0x55bfffff
+ name JumpFlood
  disable_group_view true
+ updateUI "tn = nuke.thisNode()\n\nmin_steps = int(tn.knob('min_steps').value())\nmax_steps = int(tn.knob('max_steps').value())\n\ninput_steps = int(tn.knobs()\[\"steps\"].value())\ntext = \"<br>SEARCH RADIUS: <b>\[searchradius] px</b> \[warning]<br>\"\n\nif input_steps > max_steps:\n    text = text.replace(\"\[warning]\", f\"<font color='#d6491a'>(max \{max_steps\} steps)</font>\")\n    text = text.replace(\"\[searchradius] px\", \"<font color='#d6491a'>\[searchradius] px</font>\")\n    steps = max_steps\nelif input_steps < min_steps:\n    text = text.replace(\"\[warning]\", f\"<font color='#d6491a'>(min \{min_steps\} step)</font>\")\n    text = text.replace(\"\[searchradius] px\", \"<font color='#d6491a'>\[searchradius] px</font>\")\n    steps = min_steps\nelse:\n    text = text.replace(\"\[warning]\", \"\")\n    steps = input_steps\n    \nradiusInPx = pow(2, steps)\n\ntext = text.replace(\"\[searchradius]\", str(radiusInPx))\n\ntn.knobs()\[\"txt_stepinfo\"].setValue(text)"
+ tile_color 0x55bfffff
  addUserKnob {20 tab_JumpFlood l JumpFlood}
  addUserKnob {3 steps l Steps t "Amount of steps of the Jump Flood Algorithm to perform.\n\nEach pixel will look for neighbors in a radius of 2^(steps).\nAs an example, 11 steps = 2^11 = 2048px.\n\nMIN: 1, MAX: 20"}
  steps 8
@@ -24,7 +24,7 @@ Group {
  max_steps 20
  addUserKnob {6 test_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
  addUserKnob {20 Info}
- addUserKnob {26 infotext l "" +STARTLINE T "<font size=\"6\" color=\"#55BFFF\"><b>JumpFlood</b></font><br>\n<i>v1.0.0</i><br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\n\nPerforms the Jump Flood Algorithm on the alpha<br>\nchannel of the image, based on a threshold.<br>\nThis results in a distance field from every pixel<br>\nto the closest edge of the alpha.\n<br>\n<br>\n<font color=\"#666666\">\nr: x of closest pixel<br>\ng: y of closest pixel<br>\nb: thresholded alpha<br>\na: distance to closest pixel (not normalized)<br>\n</font>\n\n<br>\n\nA part of the Visual Magic toolkit."}
+ addUserKnob {26 infotext l "" +STARTLINE T "<font size=\"6\" color=\"#55BFFF\"><b>JumpFlood</b></font><br>\n<i>v1.1.0</i><br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\n\nPerforms the Jump Flood Algorithm on the alpha<br>\nchannel of the image, based on a threshold.<br>\nThis results in a distance field from every pixel<br>\nto the closest edge of the alpha.\n<br>\n<br>\n<font color=\"#666666\">\nr: x of closest pixel<br>\ng: y of closest pixel<br>\nb: thresholded alpha<br>\na: distance to closest pixel (not normalized)<br>\n</font>\n\n<br>\n\nA part of the Visual Magic toolkit."}
 }
  Input {
   inputs 0
@@ -47,7 +47,7 @@ Group {
   xpos -263
   ypos -62
  }
-set N9def9000 [stack 0]
+set N96479000 [stack 0]
  Dot {
   name Dot3
   xpos -373
@@ -58,7 +58,7 @@ set N9def9000 [stack 0]
   xpos -373
   ypos 228
  }
-push $N9def9000
+push $N96479000
  Expression {
   expr0 x
   expr1 y

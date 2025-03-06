@@ -1,0 +1,277 @@
+#! C:/Program Files/Nuke16.0v1/nuke-16.0.1.dll -nx
+version 16.0 v1
+Group {
+ name SimpleDistort
+ inputs 2
+ tile_color 0x55bfffff
+ label "\[value channels]"
+ disable_group_view true
+ addUserKnob {20 tab_simpledistort l SimpleDistort}
+ addUserKnob {41 channels T STMap.channels}
+ addUserKnob {7 strength}
+ strength 0.25
+ addUserKnob {41 size l x/ysize T Noise_X.size}
+ addUserKnob {41 zoffset l z T Noise_X.zoffset}
+ addUserKnob {41 octaves T Noise_X.octaves}
+ addUserKnob {41 lacunarity T Noise_X.lacunarity}
+ addUserKnob {6 noisePreview l "Noise in Alpha" t "Puts the noise used to distort the image in the output alpha channel so it can be previewed.\n\nOf note, this is only the noise for the X channel and it is further processed afterwards. The Y channel uses a different seed of the same noise." +STARTLINE}
+ addUserKnob {20 tab_info l Info}
+ addUserKnob {26 infotext l "" +STARTLINE T "<font size=\"6\" color=\"#55BFFF\"><b>SimpleDistort</b></font><br>\n<i>v1.0.0</i><br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\nA really simple distortion node because I couldn't find one I liked.<br>\nWorks by adding noise to an ST map.<br>\n\n<br>\n\n<font color=\"#666666\">\nThe mask input is handled automatically, if any pixel is non-zero it<br>will use the alpha input, otherwise it will be entirely 1.<br>\n</font>\n\n<br>\n\nA part of the Visual Magic toolkit."}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0xff5594ff
+  gl_color 0xff005fff
+  label "<font size=\"1\">If any alpha exists, alpha is alpha\nIf no alpha exists, alpha is 1"
+  note_font_size 42
+  xpos -869
+  ypos -393
+  appearance Border
+  bdwidth 480
+  bdheight 298
+ }
+ Input {
+  inputs 0
+  name src
+  xpos -960
+  ypos -618
+ }
+ Dot {
+  name Dot20
+  xpos -926
+  ypos -540
+ }
+ Dot {
+  name Dot1
+  xpos -926
+  ypos -476
+ }
+set N21e1f800 [stack 0]
+ Dot {
+  name Dot2
+  xpos -1122
+  ypos -476
+ }
+ Expression {
+  expr0 (x+0.5)/width
+  expr1 (y+.5)/height
+  expr2 0
+  expr3 0
+  name CreateSTMap
+  xpos -1156
+  ypos -439
+ }
+ Dot {
+  name Dot5
+  xpos -1122
+  ypos -386
+ }
+set N21bb8000 [stack 0]
+ Dot {
+  name Dot6
+  xpos -1250
+  ypos -386
+ }
+ Expression {
+  expr0 0
+  expr1 0
+  expr2 0
+  expr3 0
+  name Black
+  xpos -1284
+  ypos -348
+ }
+ Dot {
+  name Dot4
+  xpos -1250
+  ypos -296
+ }
+set N21bb8800 [stack 0]
+ Dot {
+  name Dot3
+  xpos -1394
+  ypos -296
+ }
+ Noise {
+  output {rgba.red -rgba.green -rgba.blue none}
+  replace true
+  size 15
+  gamma 1
+  center {1024 778}
+  name Noise_X
+  xpos -1428
+  ypos -254
+ }
+ Dot {
+  name Dot12
+  xpos -1394
+  ypos -182
+ }
+set N21bb9400 [stack 0]
+ Dot {
+  name Dot10
+  xpos -1520
+  ypos -182
+ }
+ Dot {
+  name Dot11
+  xpos -1520
+  ypos 104
+ }
+ Input {
+  inputs 0
+  name mask
+  xpos -746
+  ypos -618
+  number 1
+ }
+ Dot {
+  name Dot19
+  xpos -712
+  ypos -540
+ }
+ Dot {
+  name Dot14
+  xpos -712
+  ypos -295
+ }
+set N21be8400 [stack 0]
+ Dot {
+  name Dot13
+  xpos -814
+  ypos -295
+ }
+ Blur {
+  size {{max(width,height)}}
+  filter box
+  quality 1
+  name Expand
+  xpos -848
+  ypos -251
+ }
+ Grade {
+  channels alpha
+  whitepoint 1e-08
+  white_clamp true
+  name Whiten
+  xpos -848
+  ypos -199
+ }
+ Dot {
+  name Dot17
+  xpos -814
+  ypos -128
+ }
+push $N21be8400
+push $N21e1f800
+ Dot {
+  name Dot15
+  xpos -619
+  ypos -476
+ }
+ Expression {
+  expr3 1
+  name FullAlpha
+  xpos -653
+  ypos -246
+ }
+ Dot {
+  name Dot16
+  xpos -619
+  ypos -128
+ }
+ Keymix {
+  inputs 3
+  name Mix
+  xpos -746
+  ypos -138
+ }
+ Dot {
+  name Dot18
+  xpos -712
+  ypos -30
+ }
+push $N21bb8800
+ Noise {
+  output {-rgba.red rgba.green -rgba.blue none}
+  replace true
+  size {{parent.Noise_X.size}}
+  zoffset {{parent.Noise_X.zoffset+10}}
+  octaves {{parent.Noise_X.octaves}}
+  lacunarity {{parent.Noise_X.lacunarity}}
+  gamma 1
+  center {1024 778}
+  name Noise_Y
+  xpos -1284
+  ypos -254
+ }
+ Dot {
+  name Dot7
+  xpos -1250
+  ypos -132
+ }
+push $N21bb9400
+ Merge2 {
+  inputs 2
+  bbox B
+  name Combine_XY
+  xpos -1428
+  ypos -136
+ }
+ Grade {
+  blackpoint 0.5
+  black_clamp false
+  name MinusOneToOne
+  xpos -1428
+  ypos -81
+ }
+ Dot {
+  name Dot8
+  xpos -1394
+  ypos -30
+ }
+push $N21bb8000
+ Merge2 {
+  inputs 2+1
+  operation plus
+  bbox B
+  Achannels {rgba.red rgba.green -rgba.blue -rgba.alpha}
+  Bchannels {rgba.red rgba.green -rgba.blue -rgba.alpha}
+  output {rgba.red rgba.green -rgba.blue -rgba.alpha}
+  maskChannelInput -rgba.alpha
+  mix {{parent.strength/20}}
+  name ModifySTMap
+  xpos -1156
+  ypos -34
+ }
+ Dot {
+  name Dot9
+  xpos -1122
+  ypos 35
+ }
+push $N21e1f800
+ STMap {
+  inputs 2
+  channels rgba
+  uv rgb
+  name STMap
+  xpos -960
+  ypos 31
+ }
+ Copy {
+  inputs 2
+  from0 rgba.red
+  to0 rgba.alpha
+  bbox B
+  name ShowNoise
+  xpos -960
+  ypos 94
+  disable {{!parent.noisePreview}}
+ }
+ Output {
+  name Output1
+  xpos -960
+  ypos 194
+ }
+end_group
