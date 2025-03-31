@@ -1,0 +1,39 @@
+#! C:/Program Files/Nuke16.0v1/nuke-16.0.1.dll -nx
+version 16.0 v1
+Group {
+ name SunRays
+ tile_color 0x55bfffff
+ label "Length: \[value raylength]"
+ disable_group_view true
+ addUserKnob {20 User}
+ addUserKnob {12 origin t "Where the rays originate from."}
+ addUserKnob {7 raylength l "ray length" t "The length of the rays. I bet you didn't expect that." R 0 1000}
+ raylength 500
+ addUserKnob {20 info l Info}
+ addUserKnob {26 infotext l "" +STARTLINE T "<font size=\"6\" color=\"#55BFFF\"><b>SunRays</b></font><br>\n<i>v1.0.0</i><br>\n<i>Pelle Nordentoft</i>\n\n<br><br>\n\nSimple sun rays.<br>\nA conversion of the Blender compositor<br>\nnode \"Sun Beams\" from glsl to Blinkscript.<br>\nIt operates on the rgba channels.\n\n<br><br>\n\nA part of the Visual Magic toolkit."}
+}
+ Input {
+  inputs 0
+  name Input
+  xpos 322
+  ypos -96
+ }
+ BlinkScript {
+  isBaked true
+  recompileCount 4
+  KernelDescription "3 \"SunBeams\" iterate pixelWise 6f6dd93e03076e45f1ea7ca6c14d6c29a7db5a4b0c5e81e7a4a7ef6737550643 2 \"input_tx\" Read Random \"output_img\" Write Point 2 \"Source (Pixel)\" Float 2 AAAAAAAAAAA= \"Max Steps\" Int 1 ZAAAAA== 2 \"source\" 2 1 Default \"max_steps\" 1 1 Default 2 \"width\" Float 1 1 AAAAAA== \"height\" Float 1 1 AAAAAA=="
+  kernelSource "// This kernel is heavily based on the glsl implementation in the Blender compositor.\n// Ported to Blinkscript by Pelle Nordentoft. I do not claim to have made the original effect.\nkernel SunBeams : ImageComputationKernel<ePixelWise> \{\n  Image<eRead, eAccessRandom, eEdgeClamped> input_tx;\n  Image<eWrite, eAccessPoint> output_img;\n\n  param:\n    float2 source;\n    int max_steps;\n\n  local:\n    float width;\n    float height;\n\n  void define() \{\n    defineParam(source, \"Source (Pixel)\", float2(0.0f, 0.0f));\n    defineParam(max_steps, \"Max Steps\", 100);\n  \}\n\n  void init() \{\n    width = input_tx.bounds.x2;\n    height = input_tx.bounds.y2;\n  \}\n\n  void process(int2 texel) \{\n    float2 input_size = float2(width, height);\n\n    // --- Input & Ray Calculation ---\n    // Calculate the vector from the current pixel to the light source.\n    float2 coordinates = float2(texel.x, texel.y) + float2(0.5f, 0.5f); // Pixel center\n    float2 vector_to_source = source - coordinates;\n\n    // Calculate the distance to the source (for step calculation).\n    float dx = coordinates.x - source.x;\n    float dy = coordinates.y - source.y;\n    float distance_to_source = sqrt(dx * dx + dy * dy);\n    float unbounded_steps = max(1.0f, distance_to_source);\n\n    // Clamp the number of steps.\n    int steps = min(max_steps, int(unbounded_steps));\n    float2 step_vector = vector_to_source / unbounded_steps;\n\n    // --- Sampling & Accumulation ---\n    float accumulated_weight = 0.0f;\n    float4 accumulated_color = float4(0.0f);\n\n    for (int i = 0; i <= steps; i++) \{\n      float2 position = coordinates + float2(i) * step_vector;\n\n      // Check if the sample position is within image bounds.\n      if (position.x < 0.0f || position.x > width || position.y < 0.0f || position.y > height) \{\n        break;\n      \}\n\n      // Normalize coordinates for sampling\n      float sample_x = position.x;\n      float sample_y = position.y;\n\n      // Sample the input image.\n      float4 sample_color = input_tx(round(sample_x), round(sample_y));\n\n      // Calculate the weight (quadratic falloff).\n      float weight = (1.0f - float(i) / float(steps));\n      weight = weight * weight;\n\n      // Accumulate the color and weight.\n      accumulated_weight += weight;\n      accumulated_color += sample_color * weight;\n    \}\n\n    // --- Output ---\n    // Normalize the accumulated color.\n    accumulated_color /= accumulated_weight != 0.0f ? accumulated_weight : 1.0f;\n    output_img() = accumulated_color;\n  \}\n\};"
+  rebuild ""
+  "SunBeams_Source (Pixel)" {{parent.origin.x} {parent.origin.y}}
+  "SunBeams_Max Steps" {{ceil(parent.raylength)}}
+  rebuild_finalise ""
+  name BlinkScript
+  xpos 322
+  ypos -32
+ }
+ Output {
+  name Output1
+  xpos 322
+  ypos 44
+ }
+end_group
