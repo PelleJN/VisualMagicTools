@@ -1,4 +1,4 @@
-#version 0.6.0
+#version 0.7.0
 
 import nuke
 
@@ -24,6 +24,7 @@ vmNode.addCommand('NoiseBegone', 'nuke.createNode(\"Noise_Begone\")')
 vmNode.addCommand('NormalLight', 'nuke.createNode(\"NormalLight\")', icon="normallight.png")
 vmNode.addCommand('NukeBake', 'nuke.createNode("NukeBake") if nuke.script_directory() and nuke.script_directory() != "" else nuke.message("Please save your script before trying to use NukeBake!")', icon="nukebake.png") #Only add if script is saved.
 vmNode.addCommand('SimpleDistort', 'nuke.createNode(\"SimpleDistort\")', icon="simpledistort.png")
+vmNode.addCommand('SunRays', 'nuke.createNode(\"SunRays\")', icon="sunrays.png")
 vmNode.addCommand('Toaster', 'nuke.createNode(\"Toaster\")')
 
 print("Visual Magic Toolkit Successfully Loaded")
