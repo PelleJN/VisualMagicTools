@@ -7,7 +7,7 @@ Group {
  addUserKnob {20 despeckle l Despeckle}
  addUserKnob {68 mathtype l "Value Math" t "\n<b>Max Value</b> - Considers only the brightest of R, G and B.<br>\n<b>Luma</b> - Considers the luminance (based on rec.709)" M {"Max Value" Luma "" ""}}
  addUserKnob {7 valthresh l "Value Threshold" t "The minimum value a pixel has to be in order to be removed." R 0 2}
- valthresh 0.75
+ valthresh 1.2
  addUserKnob {3 neighborthresh l "Neighbor Threshold" t "The number of bright neighbors a bright pixel needs in order to not be removed. (A pixel with less than this is removed)<br>\nThe maximum a pixel can have is 8."}
  neighborthresh 4
  addUserKnob {26 ""}
@@ -16,9 +16,16 @@ Group {
  addUserKnob {7 edgerestoreradius l "Restoration Radius" t "The distance around bright areas to restore" R 2 10}
  edgerestoreradius 2
  addUserKnob {26 ""}
+ addUserKnob {6 temporalrestoration l "Temporal Restoration" t "If, after n frames have been averaged, the value of the pixel compared to the original value is within the allowed value difference, then it is assumed that this is a constant brightspot and the pixel is untouched." +STARTLINE}
+ addUserKnob {3 temporalframes l Frames t "How many frames extra to search both in the past and future. A value of 1 means three frames are averaged.\nmin: 1\nmax: 5"}
+ temporalframes 3
+ addUserKnob {7 temporaldiff l "Value Difference" R 0 2}
+ temporaldiff 1
+ addUserKnob {6 temporaldebug l "Debug View" t "Outputs debug values for the temporal settings.\nr: averaged value\ng: original value\nb: difference between r and g\na: 1 if b > value difference, 0 otherwise. Also multiplied by the original fireflies to avoid false positives\nYellow pixels are those who were temporally stable and should be kept." +STARTLINE}
+ addUserKnob {26 "" +STARTLINE}
  addUserKnob {6 alphafireflies l "Fireflies in Alpha" t "Replaces the alpha with a mask of the pixels that were affected." +STARTLINE}
  addUserKnob {20 info l Info}
- addUserKnob {26 infotext l "" +STARTLINE T "<font size=\"6\" color=\"#55BFFF\"><b>Despeckle</b></font><br>\n<i>v2.0.1</i><br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\nThis node compares pixels to neighboring ones.<br>\nIf a pixel is bright but does not have bright neighbors,<br>\nit is deemed to be a firefly and removed.\n\n<br><br><br><br>\n\nA part of the Visual Magic toolkit."}
+ addUserKnob {26 infotext l "" +STARTLINE T "<font size=\"6\" color=\"#55BFFF\"><b>Despeckle</b></font><br>\n<i>v2.1.0</i><br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\nThis node compares pixels to neighboring ones.<br>\nIf a pixel is bright but does not have bright neighbors,<br>\nit is deemed to be a firefly and removed.\n\n<br><br><br>\n\nA part of the Visual Magic toolkit."}
 }
  Input {
   inputs 0
@@ -31,25 +38,31 @@ Group {
   xpos -1025
   ypos 316
  }
-set N20dec800 [stack 0]
+set Nb66bcc00 [stack 0]
  Dot {
   name Dot62
   xpos -771
   ypos 316
  }
-set N20decc00 [stack 0]
+set Nb66bc800 [stack 0]
+ Expression {
+  expr3 a
+  name CreateAlpha
+  xpos -805
+  ypos 2575
+ }
  Dot {
   name Dot61
   xpos -771
-  ypos 1885
+  ypos 2743
  }
-push $N20dec800
+push $Nb66bcc00
  Dot {
   name Dot51
   xpos -1266
   ypos 316
  }
-set N20ded400 [stack 0]
+set Nb5236400 [stack 0]
  Saturation {
   saturation 0
   name Saturation1
@@ -61,7 +74,7 @@ set N20ded400 [stack 0]
   xpos -1266
   ypos 445
  }
-push $N20ded400
+push $Nb5236400
  Dot {
   name Dot50
   xpos -1385
@@ -81,8 +94,14 @@ push $N20ded400
   which {{parent.mathtype}}
   name Switch1
   xpos -1419
-  ypos 442
+  ypos 441
  }
+ Dot {
+  name Dot18
+  xpos -1385
+  ypos 504
+ }
+set N1edf5400 [stack 0]
  Expression {
   temp_name0 x
   temp_expr0 parent.valthresh
@@ -92,14 +111,399 @@ push $N20ded400
   expr3 "a >= x ? 1 : 0"
   name ThresholdPixels
   xpos -1419
-  ypos 567
+  ypos 557
+ }
+ Dot {
+  name Dot19
+  xpos -1385
+  ypos 623
+ }
+set N21b94c00 [stack 0]
+push $N1edf5400
+ Dot {
+  name Dot17
+  xpos -1517
+  ypos 504
+ }
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  bbox B
+  name Copy2
+  xpos -1551
+  ypos 613
+ }
+ Premult {
+  name Premult1
+  xpos -1551
+  ypos 666
+ }
+ Dot {
+  name Dot20
+  xpos -1517
+  ypos 753
+ }
+ Dot {
+  name Dot16
+  xpos -1972
+  ypos 753
+ }
+ Remove {
+  operation keep
+  channels {rgba.red rgba.green -rgba.blue -rgba.alpha}
+  name Remove1
+  xpos -2006
+  ypos 802
+ }
+ Dot {
+  name Dot10
+  xpos -1972
+  ypos 861
+ }
+set Nebc31c00 [stack 0]
+ Dot {
+  name Dot5
+  xpos -1888
+  ypos 861
+ }
+set Ne4edac00 [stack 0]
+ Dot {
+  name Dot6
+  xpos -1794
+  ypos 861
+ }
+set Ne4edb000 [stack 0]
+ Dot {
+  name Dot7
+  xpos -1701
+  ypos 861
+ }
+set Ne4edb400 [stack 0]
+ Dot {
+  name Dot8
+  xpos -1610
+  ypos 861
+ }
+set Ne4edb800 [stack 0]
+ Dot {
+  name Dot9
+  xpos -1517
+  ypos 861
+ }
+ TimeOffset {
+  time_offset -5
+  time ""
+  name Future5
+  xpos -1551
+  ypos 903
+  disable {{"abs(time_offset) > parent.temporalframes"}}
+ }
+ Expression {
+  expr0 0
+  expr1 0
+  expr2 0
+  expr3 0
+  name NoFuture5
+  xpos -1551
+  ypos 945
+  disable {{"\[python \{nuke.thisNode().name()\[-1]\}] <= parent.temporalframes"}}
+ }
+push $Nebc31c00
+ Dot {
+  name Dot15
+  xpos -2051
+  ypos 861
+ }
+set Nfed37000 [stack 0]
+ Dot {
+  name Dot14
+  xpos -2144
+  ypos 861
+ }
+set Nfed36c00 [stack 0]
+ Dot {
+  name Dot13
+  xpos -2235
+  ypos 861
+ }
+set Nfed36800 [stack 0]
+ Dot {
+  name Dot12
+  xpos -2328
+  ypos 861
+ }
+set Nfed36400 [stack 0]
+ Dot {
+  name Dot11
+  xpos -2422
+  ypos 861
+ }
+ TimeOffset {
+  time_offset 5
+  time ""
+  name Past5
+  xpos -2456
+  ypos 903
+  disable {{"abs(time_offset) > parent.temporalframes"}}
+ }
+ Expression {
+  expr0 0
+  expr1 0
+  expr2 0
+  expr3 0
+  name NoPast5
+  xpos -2456
+  ypos 945
+  disable {{"\[python \{nuke.thisNode().name()\[-1]\}] <= parent.temporalframes"}}
+ }
+push $Ne4edb800
+ TimeOffset {
+  time_offset -4
+  time ""
+  name Future4
+  xpos -1644
+  ypos 903
+  disable {{"abs(time_offset) > parent.temporalframes"}}
+ }
+ Expression {
+  expr0 0
+  expr1 0
+  expr2 0
+  expr3 0
+  name NoFuture4
+  xpos -1644
+  ypos 945
+  disable {{"\[python \{nuke.thisNode().name()\[-1]\}] <= parent.temporalframes"}}
+ }
+push $Nfed36400
+ TimeOffset {
+  time_offset 4
+  time ""
+  name Past4
+  xpos -2362
+  ypos 903
+  disable {{"abs(time_offset) > parent.temporalframes"}}
+ }
+ Expression {
+  expr0 0
+  expr1 0
+  expr2 0
+  expr3 0
+  name NoPast4
+  xpos -2362
+  ypos 945
+  disable {{"\[python \{nuke.thisNode().name()\[-1]\}] <= parent.temporalframes"}}
+ }
+push $Ne4edb400
+ TimeOffset {
+  time_offset -3
+  time ""
+  name Future3
+  xpos -1735
+  ypos 903
+  disable {{"abs(time_offset) > parent.temporalframes"}}
+ }
+ Expression {
+  expr0 0
+  expr1 0
+  expr2 0
+  expr3 0
+  name NoFuture3
+  xpos -1735
+  ypos 945
+  disable {{"\[python \{nuke.thisNode().name()\[-1]\}] <= parent.temporalframes"}}
+ }
+push $Nfed36800
+ TimeOffset {
+  time_offset 3
+  time ""
+  name Past3
+  xpos -2269
+  ypos 903
+  disable {{"abs(time_offset) > parent.temporalframes"}}
+ }
+ Expression {
+  expr0 0
+  expr1 0
+  expr2 0
+  expr3 0
+  name NoPast3
+  xpos -2269
+  ypos 945
+  disable {{"\[python \{nuke.thisNode().name()\[-1]\}] <= parent.temporalframes"}}
+ }
+push $Ne4edb000
+ TimeOffset {
+  time_offset -2
+  time ""
+  name Future2
+  xpos -1828
+  ypos 903
+  disable {{"abs(time_offset) > parent.temporalframes"}}
+ }
+ Expression {
+  expr0 0
+  expr1 0
+  expr2 0
+  expr3 0
+  name NoFuture2
+  xpos -1828
+  ypos 945
+  disable {{"\[python \{nuke.thisNode().name()\[-1]\}] <= parent.temporalframes"}}
+ }
+push $Nfed36c00
+ TimeOffset {
+  time_offset 2
+  time ""
+  name Past2
+  xpos -2178
+  ypos 903
+  disable {{"abs(time_offset) > parent.temporalframes"}}
+ }
+ Expression {
+  expr0 0
+  expr1 0
+  expr2 0
+  expr3 0
+  name NoPast2
+  xpos -2178
+  ypos 945
+  disable {{"\[python \{nuke.thisNode().name()\[-1]\}] <= parent.temporalframes"}}
+ }
+push $Ne4edac00
+ TimeOffset {
+  time_offset -1
+  time ""
+  name Future1
+  xpos -1922
+  ypos 903
+ }
+push 0
+push $Nfed37000
+ TimeOffset {
+  time_offset 1
+  time ""
+  name Past1
+  xpos -2085
+  ypos 903
+ }
+push $Nebc31c00
+ Merge2 {
+  inputs 11+1
+  operation plus
+  bbox B
+  Achannels {rgba.red -rgba.green -rgba.blue}
+  Bchannels {rgba.red -rgba.green -rgba.blue}
+  output {rgba.red -rgba.green -rgba.blue}
+  name Add
+  xpos -2006
+  ypos 1030
+ }
+ Expression {
+  temp_name0 frames
+  temp_expr0 parent.temporalframes*2+1
+  temp_name1 div
+  temp_expr1 min(max(frames,3),11)
+  expr0 r/div
+  channel1 {-rgba.red -rgba.green -rgba.blue}
+  channel2 {-rgba.red -rgba.green -rgba.blue}
+  channel3 {none none none -rgba.alpha}
+  name Divide
+  xpos -2006
+  ypos 1092
+  addUserKnob {20 User}
+ }
+ Expression {
+  expr2 abs(r-g)
+  name Difference
+  xpos -2006
+  ypos 1140
+ }
+ Expression {
+  expr3 "b > parent.temporaldiff"
+  name Limit_Diference
+  xpos -2006
+  ypos 1191
+ }
+ Dot {
+  name Dot21
+  xpos -1972
+  ypos 1252
+ }
+set N1edf4c00 [stack 0]
+push $N21b94c00
+ Dot {
+  name Dot22
+  xpos -1385
+  ypos 1194
+ }
+set N1edf3000 [stack 0]
+ Dot {
+  name Dot24
+  xpos -1511
+  ypos 1194
+ }
+ Merge2 {
+  inputs 2
+  operation multiply
+  bbox B
+  Achannels alpha
+  Bchannels alpha
+  output alpha
+  name Merge1
+  xpos -1545
+  ypos 1242
+ }
+ Dot {
+  name Dot23
+  xpos -1511
+  ypos 1300
+ }
+set Ndd3db400 [stack 0]
+ Dot {
+  name Dot26
+  xpos -1511
+  ypos 1445
+ }
+push $N1edf4c00
+ Copy {
+  inputs 2
+  from0 rgba.alpha
+  to0 rgba.alpha
+  bbox B
+  name Copy3
+  xpos -2006
+  ypos 1435
+ }
+ Dot {
+  name Dot25
+  xpos -1972
+  ypos 2658
+ }
+push $Ndd3db400
+push $N1edf3000
+ Switch {
+  inputs 2
+  which {{parent.temporalrestoration}}
+  name TemporalSwitch
+  xpos -1419
+  ypos 1296
+ }
+ Expression {
+  expr0 a
+  expr1 a
+  expr2 a
+  name a_everywhere
+  xpos -1419
+  ypos 1338
  }
  Dot {
   name Dot4
   xpos -1385
-  ypos 678
+  ypos 1445
  }
-set N20ebe000 [stack 0]
+set Nb5237000 [stack 0]
  Matrix {
   channels rgb
   matrix {
@@ -110,18 +514,18 @@ set N20ebe000 [stack 0]
   }
   name Matrix9
   xpos -1419
-  ypos 769
+  ypos 1537
  }
  Dot {
   name Dot3
   xpos -1385
-  ypos 845
+  ypos 1612
  }
-push $N20ebe000
+push $Nb5237000
  Dot {
   name Dot42
   xpos -1210
-  ypos 678
+  ypos 1445
  }
  Expression {
   expr0 r
@@ -130,7 +534,7 @@ push $N20ebe000
   expr3 0
   name r_is_abovethresh
   xpos -1244
-  ypos 772
+  ypos 1539
  }
  Copy {
   inputs 2
@@ -138,7 +542,7 @@ push $N20ebe000
   to0 rgba.green
   name g_is_neighborcount
   xpos -1244
-  ypos 836
+  ypos 1603
  }
  Expression {
   temp_name0 neighborthresh
@@ -146,57 +550,57 @@ push $N20ebe000
   expr2 "r == 1 && g >= neighborthresh ? 1 : 0"
   name b_is_safe
   xpos -1244
-  ypos 910
+  ypos 1677
  }
  Expression {
   expr3 "r - b"
   name a_is_bad
   xpos -1244
-  ypos 968
+  ypos 1735
  }
  Dot {
   name Dot43
   xpos -1210
-  ypos 1029
+  ypos 1796
  }
-push $N20dec800
+push $Nb66bcc00
  Copy {
   inputs 2
   from0 rgba.alpha
   to0 rgba.alpha
   name Copy1
   xpos -1059
-  ypos 1020
+  ypos 1787
  }
  Inpaint2 {
   center {640 960}
   name Inpaint2
   xpos -1059
-  ypos 1124
+  ypos 1891
  }
  Dot {
   name Dot53
   xpos -1025
-  ypos 1210
+  ypos 1977
  }
-set N20ebf400 [stack 0]
+set Nb52b4400 [stack 0]
  Dot {
   name Dot54
   xpos -1196
-  ypos 1210
+  ypos 1977
  }
-set N20ebf800 [stack 0]
+set Nb52b4800 [stack 0]
  Dot {
   name Dot1
   xpos -1328
-  ypos 1210
+  ypos 1977
  }
  Dot {
   name Dot2
   xpos -1328
-  ypos 1806
+  ypos 2573
  }
-push $N20ebf800
+push $Nb52b4800
  Expression {
   expr0 "max(r, g, b)"
   expr1 "max(r, g, b)"
@@ -204,7 +608,7 @@ push $N20ebf800
   expr3 "max(r, g, b)"
   name GreatestValue1
   xpos -1230
-  ypos 1251
+  ypos 2018
  }
  Expression {
   temp_name0 x
@@ -215,34 +619,34 @@ push $N20ebf800
   expr3 "a >= x ? 1 : 0"
   name ThresholdPixels1
   xpos -1230
-  ypos 1304
+  ypos 2071
  }
  Blur {
   channels {rgba.red -rgba.green -rgba.blue none}
   size {{parent.edgerestoreradius}}
   name Blur2
   xpos -1230
-  ypos 1354
+  ypos 2121
  }
  Grade {
   channels {rgba.red -rgba.green -rgba.blue none}
   whitepoint 0.5
   name Grade3
   xpos -1230
-  ypos 1407
+  ypos 2174
  }
  Dot {
   name Dot57
   xpos -1196
-  ypos 1485
+  ypos 2252
  }
-set N20f12400 [stack 0]
+set Nb52b5400 [stack 0]
  Dot {
   name Dot58
   xpos -1196
-  ypos 1610
+  ypos 2377
  }
-push $N20decc00
+push $Nb66bc800
  Dot {
   name Dot55
   xpos -674
@@ -251,25 +655,25 @@ push $N20decc00
  Dot {
   name Dot56
   xpos -674
-  ypos 1485
+  ypos 2252
  }
-set N20f13000 [stack 0]
+set Nb52f8000 [stack 0]
  Expression {
   expr3 0
   name Expression2
   xpos -708
-  ypos 1607
+  ypos 2374
  }
-push $N20f12400
-push $N20f13000
-push $N20ebf400
+push $Nb52b5400
+push $Nb52f8000
+push $Nb52b4400
  Keymix {
   inputs 3
   channels rgba
   maskChannel rgba.red
   name Keymix1
   xpos -1059
-  ypos 1482
+  ypos 2249
  }
  Copy {
   inputs 2+1
@@ -279,21 +683,30 @@ push $N20ebf400
   maskChannelMask rgba.red
   name Copy4
   xpos -1059
-  ypos 1601
+  ypos 2368
  }
  Expression {
   expr3 "a >= 1 ? 1 : 0"
   name Expression1
   xpos -1059
-  ypos 1705
+  ypos 2472
  }
  Switch {
   inputs 2
   which 1
   name Switch2
   xpos -1059
-  ypos 1803
+  ypos 2570
   disable {{parent.edgerestore}}
+ }
+ Switch {
+  inputs 2
+  which 1
+  name TemporalDebug
+  label "\n"
+  xpos -1059
+  ypos 2654
+  disable {{!parent.temporaldebug}}
  }
  Copy {
   inputs 2
@@ -301,20 +714,13 @@ push $N20ebf400
   to0 rgba.alpha
   name Copy5
   xpos -1059
-  ypos 1876
+  ypos 2734
   disable {{parent.alphafireflies}}
  }
  Output {
   name Output
   xpos -1059
-  ypos 1976
- }
- StickyNote {
-  inputs 0
-  name StickyNote6
-  label "Edge Restoration\nToggle"
-  xpos -937
-  ypos 1800
+  ypos 2834
  }
  StickyNote {
   inputs 0
@@ -328,27 +734,34 @@ push $N20ebf400
   name StickyNote1
   label "Original Alpha"
   xpos -975
-  ypos 1923
- }
- StickyNote {
-  inputs 0
-  name StickyNote4
-  label "Bad Pixel Alpha"
-  xpos -953
-  ypos 1708
+  ypos 2781
  }
  StickyNote {
   inputs 0
   name StickyNote3
   label "Edge Restoration Radius\nLimit to min 2"
   xpos -1127
-  ypos 1349
+  ypos 2116
  }
  StickyNote {
   inputs 0
   name StickyNote2
   label "Edge Restoration"
   xpos -1173
-  ypos 1508
+  ypos 2275
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote6
+  label "Edge Restoration\nToggle"
+  xpos -961
+  ypos 2564
+ }
+ StickyNote {
+  inputs 0
+  name StickyNote4
+  label "Bad Pixel Alpha"
+  xpos -962
+  ypos 2472
  }
 end_group
