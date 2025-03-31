@@ -1,10 +1,17 @@
 vMAJOR.NEWGIZMO.UPDATEDGIZMO
 
+v0.7.0
+ - Added SunRays v1.0.0
+     - This node is a BlinkScript implementation of the Blender compositor node "Sun Beams", converted from glsl
+ - Updated Despeckle to 2.1.0
+     - Despeckle now has the option to compare values over time as an option to recover highlights that are consistent, and therefore likely supposed to be there.
+
 v0.6.0
  - Added SimpleDistort v1.0.0
      - This node performs a very simple distortion of the image using fbm noise added to an ST map.
  - The JumpFlood node is now listed as "JumpFlood_AlphaDistance" in the search menu, as was intended. It will still be added simply called "JumpFlood".
  - NukeBake and NormalLight have turned back to Gizmos from Groups, since they were using onCreate callbacks that were not working on groups.
+ - Fixed NormalLight not centering its position when created.
  - Reformatted some entries in the changelog file.
 
 v0.5.1
