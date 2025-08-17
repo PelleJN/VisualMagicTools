@@ -1,4 +1,4 @@
-#version 0.7.0
+#version 0.8.0
 
 import nuke
 
@@ -16,6 +16,7 @@ vmNode = toolbar.addMenu('Visual Magic', icon = 'vmlogo.png')
 
 #add gizmos
 vmNode.addCommand('AOVEdit', 'nuke.createNode(\"AOVEdit\")', icon="aovedit.png")
+vmNode.addCommand('ColorBoost', 'nuke.createNode(\"ColorBoost\")', icon="colorboost.png")
 vmNode.addCommand('ColorToColor', 'nuke.createNode(\"ColorToColor\")', icon="colortocolor.png")
 vmNode.addCommand('Despeckle', 'nuke.createNode(\"Despeckle\")', icon="despeckle.png")
 vmNode.addCommand('DotGrid', 'nuke.createNode(\"DotGrid\")')

@@ -7,6 +7,7 @@ Then add: *nuke.pluginAddPath('./VisualMagicTools')* to your *init.py* file (als
 
 Current Gizmos:\
 **AOVEdit** - *Pelle J Nordentoft*\
+**ColorBoost** - *Pelle J Nordentoft*\
 **ColorToColor** - *Pelle J Nordentoft*\
 **Despeckle** - *Pelle J Nordentoft*\
 **DotGrid** - *Pelle J Nordentoft*\

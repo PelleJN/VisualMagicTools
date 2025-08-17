@@ -1,5 +1,9 @@
 vMAJOR.NEWGIZMO.UPDATEDGIZMO
 
+v0.8.0
+ - Added ColorBoost v1.0.0
+     - This node is extremely simple, it boosts saturation in desaturated areas, mimicing the behavior you might see in photo-editing software.
+
 v0.7.0
  - Added SunRays v1.0.0
      - This node is a BlinkScript implementation of the Blender compositor node "Sun Beams", converted from glsl
