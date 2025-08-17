@@ -1,0 +1,93 @@
+#! C:/Program Files/Nuke16.0v1/nuke-16.0.1.dll -nx
+version 16.0 v1
+Gizmo {
+ tile_color 0x55bfffff
+ label "\[value strength]"
+ disable_group_view true
+ addUserKnob {20 User}
+ addUserKnob {7 strength t "Shockingly, this controls the strength of the Color Boost effect"}
+ strength {0.35}
+ addUserKnob {7 max_sat l "max saturation" t "The maximum amount of saturation-boosting that can be applied to a pixel. Default of 4 is pretty good. A value of 1 will have no effect. Values below 1 will instead desaturate desaturated areas even further." R 0 5}
+ max_sat {4}
+ addUserKnob {20 info l Info}
+ addUserKnob {26 infotext l "" +STARTLINE T "<font size=\"6\" color=\"#55BFFF\"><b>ColorBoost</b></font><br>\n<i>v1.0.0</i><br>\n<i>Pelle Nordentoft</i>\n\n<br><br><br>\n\nBoosts saturation of less saturated areas.<br>\nNot meant to be photorealistic, just for breathing some life into dull images.\n\n<br><br><br><br>\n\nA part of the Visual Magic toolkit."}
+}
+ BackdropNode {
+  inputs 0
+  name BackdropNode1
+  tile_color 0x222222ff
+  label "Color Boost Strength\n"
+  note_font "Verdana Bold"
+  note_font_size 42
+  xpos 550
+  ypos -773
+  bdwidth 106
+  bdheight 305
+ }
+ Input {
+  inputs 0
+  name Input
+  xpos 352
+  ypos -792
+  addUserKnob {20 User}
+  addUserKnob {7 hue t "YUV Hue Rotation" +INVISIBLE R 0 360}
+ }
+ Dot {
+  name Dot2
+  xpos 386
+  ypos -690
+ }
+set N89314000 [stack 0]
+ Dot {
+  name Dot1
+  xpos 597
+  ypos -690
+ }
+ Colorspace {
+  colorspace_out HSV
+  name HSV
+  xpos 563
+  ypos -649
+ }
+ Remove {
+  operation keep
+  channels {-rgba.red rgba.green -rgba.blue -rgba.alpha}
+  name Sat_Only
+  xpos 563
+  ypos -605
+ }
+ Expression {
+  expr1 1-g
+  name Inverted_Sat
+  xpos 563
+  ypos -558
+ }
+ Expression {
+  temp_name0 strength
+  temp_expr0 parent.strength
+  expr1 g*strength
+  name Strength
+  xpos 563
+  ypos -513
+ }
+ Dot {
+  name Dot3
+  xpos 597
+  ypos -437
+ }
+push $N89314000
+ Saturation {
+  inputs 1+1
+  saturation {{parent.max_sat}}
+  maskChannelMask rgba.green
+  name Saturation
+  label "Sat: \[value saturation]"
+  xpos 352
+  ypos -447
+ }
+ Output {
+  name Output
+  xpos 352
+  ypos -349
+ }
+end_group
