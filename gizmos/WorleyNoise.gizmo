@@ -1,0 +1,107 @@
+#! C:/Program Files/Nuke16.0v1/nuke-16.0.1.dll -nx
+version 16.0 v1
+Gizmo {
+ tile_color 0x21ffff
+ addUserKnob {20 UserTab l Worley}
+ addUserKnob {6 UseInput l Useinput t "Enables input if needed." +STARTLINE}
+ addUserKnob {6 _1_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+ addUserKnob {7 Ammount t "I dunno why i Included this." R 0 5}
+ Ammount 1
+ addUserKnob {7 Scale t "Controls the scale of the noise." R 0 10}
+ Scale 0.12
+ addUserKnob {3 PixelSize t "Controls pixelsize"}
+ addUserKnob {3 DistanceType t "Euclidean (0):\nStandard straight-line distance. Creates round, classic cellular patterns.\nManhattan (1):\nMeasures only along the X, Y, and Z axes (“city blocks”). Produces diamond or cube-shaped cells.\nChebyshev (2):\nMeasures the largest difference along any axis. Makes cells appear square or boxy.\n\nThere are only 3."}
+ addUserKnob {3 NoiseType t "There are 8 Different types of noise, ranges from 0-7."}
+ addUserKnob {3 Octaves t "How many times the noise layers on it self."}
+ Octaves 1
+ addUserKnob {7 EdgeWidth t "Only works on Noisetype 4" R 0 20}
+ EdgeWidth 0.08
+ addUserKnob {7 Smoothness t "This only works on NoiseType4." R 0 100}
+ Smoothness 0.7
+ addUserKnob {7 Lacunarity R 0.2 20}
+ Lacunarity 1.1
+ addUserKnob {7 Gain R 0 20}
+ Gain 1.04
+ addUserKnob {7 Gamma R 0 5}
+ Gamma 1
+ addUserKnob {41 which +INVISIBLE T Switch1.which}
+ addUserKnob {41 format t "Choose format when you dont have a input" T Constant1.format}
+ addUserKnob {26 Author l "" t Soojaa!! +STARTLINE T "<span style=\"color:#666\"><br/><b>WorleyNoise </b> - <a href=\"http://\" style=\"color:#666;text-decoration: none;\">Lukas-Kelloniemi</a>, 2025</span>"}
+ addUserKnob {20 UserTransformTab l Transform t aa}
+ addUserKnob {3 XMove t "moves in the X Coordinate"}
+ addUserKnob {3 YMove t "Moves in the Y coordinate."}
+ addUserKnob {3 ZMove t "Moves in the Z Coordinate."}
+ ZMove 45.5
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos -388
+  ypos 47
+ }
+ Constant {
+  inputs 0
+  channels rgb
+  format "1920 1080 0 0 1920 1080 1 HD_1080"
+  name Constant1
+  xpos -4
+  ypos -214
+ }
+ Switch {
+  inputs 2
+  which {{parent.UseInput}}
+  name Switch1
+  xpos 0
+  ypos 47
+ }
+ BlinkScript {
+  recompileCount 11
+  ProgramGroup 1
+  KernelDescription "3 \"WorleyNoise\" iterate componentWise fabf4eb1c209beebbc9cea4e6a30b39f29afa3ad423e61fe3b6ae862e9cf8728 2 \"src\" Read Point \"dst\" Write Point 14 \"Amount\" Float 1 AACAPw== \"Scale\" Float 1 AAAAQQ== \"X Move\" Float 1 AAAAAA== \"Y Move\" Float 1 AAAAAA== \"Z Move\" Float 1 AAAAAA== \"Pixel Size\" Int 1 AQAAAA== \"Distance Type\" Int 1 AAAAAA== \"Return Type\" Int 1 AAAAAA== \"Octaves\" Int 1 AQAAAA== \"Edge Width\" Float 1 j8L1PQ== \"Smoothness\" Float 1 AAAAQA== \"Lacunarity\" Float 1 AAAAQA== \"Gain\" Float 1 AAAAPw== \"Gamma\" Float 1 AACAPw== 14 \"amount\" 1 1 Default \"scale\" 1 1 Default \"xmove\" 1 1 Default \"ymove\" 1 1 Default \"zmove\" 1 1 Default \"pixelSize\" 1 1 Default \"distanceType\" 1 1 Default \"returnType\" 1 1 Default \"octaves\" 1 1 Default \"edgeWidth\" 1 1 Default \"smoothness\" 1 1 Default \"lacunarity\" 1 1 Default \"gain\" 1 1 Default \"gamma\" 1 1 Default 0"
+  kernelSource "kernel WorleyNoise : ImageComputationKernel<eComponentWise> \{\n  Image<eRead, eAccessPoint> src;\n  Image<eWrite, eAccessPoint> dst;\n\n  param:\n    float amount;\n    float scale;\n    float xmove;\n    float ymove;\n    float zmove;\n    int pixelSize;\n    int distanceType;\n    int returnType;\n    int octaves;\n    float edgeWidth;\n    float smoothness;\n    float lacunarity; \n    float gain;       \n    float gamma;      \n\n  local:\n    void define() \{\n      defineParam(amount, \"Amount\", 1.0f);\n      defineParam(scale, \"Scale\", 8.0f);\n      defineParam(xmove, \"X Move\", 0.0f);\n      defineParam(ymove, \"Y Move\", 0.0f);\n      defineParam(zmove, \"Z Move\", 0.0f);\n      defineParam(pixelSize, \"Pixel Size\", 1);\n      defineParam(distanceType, \"Distance Type\", 0);\n      defineParam(returnType, \"Return Type\", 0);\n      defineParam(edgeWidth, \"Edge Width\", 0.12f);\n      defineParam(smoothness, \"Smoothness\", 2.0f);\n      defineParam(octaves, \"Octaves\", 1);\n      defineParam(lacunarity, \"Lacunarity\", 2.0f); \n      defineParam(gain, \"Gain\", 0.5f);             \n      defineParam(gamma, \"Gamma\", 1.0f);           \n    \}\n\n    void init() \{ \}\n\n    float fract(float x) \{\n      return x - floor(x);\n    \}\n    float3 fract(float3 p) \{\n      return float3(fract(p.x), fract(p.y), fract(p.z));\n    \}\n    float smoothstep(float edge0, float edge1, float x) \{\n      float t = clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f);\n      return t * t * (3.0f - 2.0f * t);\n    \}\n    float hash(float3 p) \{\n      p = fract(p * float3(0.1031f, 0.1030f, 0.0973f));\n      p += dot(p, float3(p.y, p.z, p.x) + 33.33f);\n      return fract((p.x + p.y) * p.z);\n    \}\n    float3 hash3(float3 p) \{\n      float3 q = float3(\n        dot(p, float3(127.1f, 311.7f, 74.7f)),\n        dot(p, float3(269.5f, 183.3f, 246.1f)),\n        dot(p, float3(113.5f, 271.9f, 124.6f))\n      );\n      return fract(sin(q) * 43758.5453f);\n    \}\n    float distance(float3 a, float3 b, int type) \{\n      float3 d = b - a;\n      if (type == 0) return sqrt(d.x * d.x + d.y * d.y + d.z * d.z);\n      else if (type == 1) return fabs(d.x) + fabs(d.y) + fabs(d.z);\n      else return max(max(fabs(d.x), fabs(d.y)), fabs(d.z));\n    \}\n    float worleyNoise(float3 p) \{\n      float3 cell = floor(p);\n      float3 frac_p = p - cell;\n      float minDist1 = 10.0f;\n      float minDist2 = 10.0f;\n      float minDist3 = 10.0f;\n      float minDist4 = 10.0f;\n\n      for (int z = -1; z <= 1; z++) \{\n        for (int y = -1; y <= 1; y++) \{\n          for (int x = -1; x <= 1; x++) \{\n            float3 neighbor = float3(x, y, z);\n            float3 neighborCell = cell + neighbor;\n            float3 point = hash3(neighborCell);\n            float3 diff = neighbor + point - frac_p;\n            float dist = distance(float3(0.0f, 0.0f, 0.0f), diff, distanceType);\n\n            if (dist < minDist1) \{\n              minDist4 = minDist3;\n              minDist3 = minDist2;\n              minDist2 = minDist1;\n              minDist1 = dist;\n            \}\n            else if (dist < minDist2) \{\n              minDist4 = minDist3;\n              minDist3 = minDist2;\n              minDist2 = dist;\n            \}\n            else if (dist < minDist3) \{\n              minDist4 = minDist3;\n              minDist3 = dist;\n            \}\n            else if (dist < minDist4) \{\n              minDist4 = dist;\n            \}\n          \}\n        \}\n      \}\n\n      if (returnType == 0) return minDist1;                 // F1\n      else if (returnType == 1) return minDist2;            // F2\n      else if (returnType == 2) return minDist2 - minDist1; // F2-F1 (edges)\n      else if (returnType == 3) return minDist1 + minDist2; // F1+F2\n      else if (returnType == 4) \{ // Glowing (fluid)\n        float edge = minDist2 - minDist1;\n        float glow = 1.0f - smoothstep(0.0f, edgeWidth, edge);\n        glow = clamp(glow, 0.0f, 1.0f);\n        float normSmooth = max(smoothness, 0.01f);\n        return pow(glow, 1.0f / normSmooth);\n      \}\n      else if (returnType == 5) return minDist2 * minDist1; // Crackle pattern\n      else if (returnType == 6) return minDist3 - minDist1; // F3 - F1\n      else if (returnType == 7) return minDist4 - minDist1; // F4 - F1\n      else return minDist1;                                 // Default to F1\n    \}\n    // Fractal Worley with lacunarity & gain\n    float fractalWorley(float3 p, int octs) \{\n      float result = 0.0f;\n      float amplitude = 1.0f;\n      float frequency = 1.0f;\n      float totalAmp = 0.0f;\n      for (int i = 0; i < octs; i++) \{\n        result += worleyNoise(p * frequency) * amplitude;\n        totalAmp += amplitude;\n        amplitude *= gain;         \n        frequency *= lacunarity;   \n      \}\n      return result / totalAmp;\n    \}\n\n    void process(int3 pos) \{\n      int px = (pos.x / pixelSize) * pixelSize;\n      int py = (pos.y / pixelSize) * pixelSize;\n      float3 p = float3(px + xmove, py + ymove, zmove) * scale * 0.1f;\n\n      float noise;\n      if (octaves > 1)\n        noise = fractalWorley(p, octaves);\n      else\n        noise = worleyNoise(p);\n\n      noise = clamp(noise, 0.0f, 1.0f);\n\n      // Gamma-correct the output\n      noise = pow(noise, 1.0f / max(gamma, 0.01f));\n\n      float value = src();\n      dst() = value + noise * amount;\n    \}\n\};\n"
+  rebuild ""
+  WorleyNoise_Amount {{parent.Ammount}}
+  WorleyNoise_Scale {{parent.Scale}}
+  "WorleyNoise_X Move" {{parent.XMove}}
+  "WorleyNoise_Y Move" {{parent.YMove}}
+  "WorleyNoise_Z Move" {{parent.ZMove}}
+  "WorleyNoise_Pixel Size" {{parent.PixelSize}}
+  "WorleyNoise_Distance Type" {{parent.DistanceType}}
+  "WorleyNoise_Return Type" {{parent.NoiseType}}
+  WorleyNoise_Octaves {{parent.Octaves}}
+  "WorleyNoise_Edge Width" {{parent.EdgeWidth}}
+  WorleyNoise_Smoothness {{parent.Smoothness}}
+  WorleyNoise_Lacunarity {{parent.Lacunarity}}
+  WorleyNoise_Gain {{parent.Gain}}
+  WorleyNoise_Gamma {{parent.Gamma}}
+  rebuild_finalise ""
+  name BlinkScript1
+  xpos 0
+  ypos 106
+ }
+ Clamp {
+  channels alpha
+  name Clamp1
+  xpos 0
+  ypos 144
+ }
+ Shuffle2 {
+  fromInput1 {
+   {0}
+   B
+  }
+  fromInput2 {
+   {0}
+   B
+  }
+  mappings "4 rgba.red 0 0 rgba.red 0 0 rgba.green 0 1 rgba.green 0 1 rgba.blue 0 2 rgba.blue 0 2 rgba.red 0 0 rgba.alpha 0 3"
+  name Shuffle1
+  xpos 0
+  ypos 233
+ }
+ Output {
+  name Output1
+  xpos 0
+  ypos 308
+ }
+end_group
