@@ -1,5 +1,9 @@
 vMAJOR.NEWGIZMO.UPDATEDGIZMO
 
+v0.9.0
+ - Added WorleyNoise v1.0.0
+     - This node implements multiple Worley Noise types using Blinkscript.
+
 v0.8.0
  - Added ColorBoost v1.0.0
      - This node is extremely simple, it boosts saturation in desaturated areas, mimicing the behavior you might see in photo-editing software.
