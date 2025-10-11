@@ -17,7 +17,8 @@ Current Gizmos:\
 **NukeBake** - *Pelle J Nordentoft*\
 **SimpleDistort** - *Pelle J Nordentoft*\
 **SunRays** - *Pelle J Nordentoft*\
-**Toaster** - *Markus Ädel*
+**Toaster** - *Markus Ädel*\
+**WorleyNoise** - *Lukas Kelloniemi*
 
 Gizmo Ideas:\
 **Edge Extend** - A simpler way to Edge Extend alphas\
