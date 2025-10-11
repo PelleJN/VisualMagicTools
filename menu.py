@@ -1,4 +1,4 @@
-#version 0.8.0
+#version 0.9.0
 
 import nuke
 
@@ -27,5 +27,6 @@ vmNode.addCommand('NukeBake', 'nuke.createNode("NukeBake") if nuke.script_direct
 vmNode.addCommand('SimpleDistort', 'nuke.createNode(\"SimpleDistort\")', icon="simpledistort.png")
 vmNode.addCommand('SunRays', 'nuke.createNode(\"SunRays\")', icon="sunrays.png")
 vmNode.addCommand('Toaster', 'nuke.createNode(\"Toaster\")')
+vmNode.addCommand('WorleyNoise', 'nuke.createNode(\"WorleyNoise\")', icon="worleynoise.png")
 
 print("Visual Magic Toolkit Successfully Loaded")
