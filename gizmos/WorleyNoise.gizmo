@@ -1,107 +1,81 @@
-#! C:/Program Files/Nuke16.0v1/nuke-16.0.1.dll -nx
-version 16.0 v1
+#! C:/Program Files/Nuke16.0v6/nuke-16.0.6.dll -nx
+version 16.0 v6
 Gizmo {
- tile_color 0x21ffff
- addUserKnob {20 UserTab l Worley}
- addUserKnob {6 UseInput l Useinput t "Enables input if needed." +STARTLINE}
- addUserKnob {6 _1_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
- addUserKnob {7 Ammount t "I dunno why i Included this." R 0 5}
- Ammount 1
- addUserKnob {7 Scale t "Controls the scale of the noise." R 0 10}
- Scale 0.12
- addUserKnob {3 PixelSize t "Controls pixelsize"}
- addUserKnob {3 DistanceType t "Euclidean (0):\nStandard straight-line distance. Creates round, classic cellular patterns.\nManhattan (1):\nMeasures only along the X, Y, and Z axes (“city blocks”). Produces diamond or cube-shaped cells.\nChebyshev (2):\nMeasures the largest difference along any axis. Makes cells appear square or boxy.\n\nThere are only 3."}
- addUserKnob {3 NoiseType t "There are 8 Different types of noise, ranges from 0-7."}
- addUserKnob {3 Octaves t "How many times the noise layers on it self."}
- Octaves 1
- addUserKnob {7 EdgeWidth t "Only works on Noisetype 4" R 0 20}
- EdgeWidth 0.08
- addUserKnob {7 Smoothness t "This only works on NoiseType4." R 0 100}
- Smoothness 0.7
- addUserKnob {7 Lacunarity R 0.2 20}
- Lacunarity 1.1
- addUserKnob {7 Gain R 0 20}
- Gain 1.04
- addUserKnob {7 Gamma R 0 5}
- Gamma 1
- addUserKnob {41 which +INVISIBLE T Switch1.which}
- addUserKnob {41 format t "Choose format when you dont have a input" T Constant1.format}
- addUserKnob {26 Author l "" t Soojaa!! +STARTLINE T "<span style=\"color:#666\"><br/><b>WorleyNoise </b> - <a href=\"http://\" style=\"color:#666;text-decoration: none;\">Lukas-Kelloniemi</a>, 2025</span>"}
- addUserKnob {20 UserTransformTab l Transform t aa}
- addUserKnob {3 XMove t "moves in the X Coordinate"}
- addUserKnob {3 YMove t "Moves in the Y coordinate."}
- addUserKnob {3 ZMove t "Moves in the Z Coordinate."}
- ZMove 45.5
+ inputs 0
+ tile_color 0xffff
+ addUserKnob {20 Main}
+ addUserKnob {41 format t aaa T Constant6.format}
+ addUserKnob {41 WorleyNoise_Amount l Amount t "Amount\nA global multiplier for the noise brightness. Default is 1.0." T WorleyNoise0.WorleyNoise_Amount}
+ addUserKnob {41 WorleyNoise_Scale l Scale t "Scale\nControls the global size of the noise pattern. Lower values create smaller, denser details (high frequency); higher values create larger, zoomed-in features (low frequency)" T WorleyNoise0.WorleyNoise_Scale}
+ addUserKnob {41 WorleyNoise_Translate l Translate t "Moves the noise pattern across the X, Y, and Z coordinates. Animate Z " T WorleyNoise0.WorleyNoise_Translate}
+ addUserKnob {41 WorleyNoise_Rotation l Rotation T WorleyNoise0.WorleyNoise_Rotation}
+ addUserKnob {41 WorleyNoise_Jitter l Jitter t "Controls the randomness of the cell center positions. 0.0 = Perfect Grid (Robotic) 1.0 = Fully Random (Organic) (Only affects Cellular/Worley noise types)." T WorleyNoise0.WorleyNoise_Jitter}
+ addUserKnob {41 WorleyNoise_PixelSize l "Pixel Size" t "Pixelates the output for a mosaic/retro effect. A value of 1 is standard resolution. Higher values create larger pixel blocks." T "WorleyNoise0.WorleyNoise_Pixel Size"}
+ addUserKnob {4 NoiseType t "Selects the algorithm used to generate the pattern. 0-9 are Cellular (Voronoi) variations; 10-11 are Cloud/Perlin types; 12+ are Geometric patterns like Gyroids or Stripes." M {"F1 (Cells)" "F2 (Points)" "Crackle (F2-F1)" "Midpoint (F1+F2)" "Intersection (F1*F2)" "Smooth Min (Organic)" "Soft Borders" "Complex Web (F3-F1)" "Thinner Web (F4-F1)" Pebbles Rings "Stepped (Quantized)" Voro-Noise "Cell ID (Random Color)" "Value Noise (Clouds)" "Gradient Noise (Perlin)" "Gyroid (Sponge)" Stripes Checkerboard ""}}
+ addUserKnob {4 DistanceType M {Euclidean Manhattan Chebyshev Stars/Squircle "" ""}}
+ addUserKnob {41 WorleyNoise_Lacunarity l Lacunarity t "Lacunarity\nDetermines how much the frequency (size) changes with each octave. A value of 2.0 means each new layer is half the size of the previous one." T WorleyNoise0.WorleyNoise_Lacunarity}
+ addUserKnob {41 WorleyNoise_Octaves l Octaves T WorleyNoise0.WorleyNoise_Octaves}
+ addUserKnob {41 WorleyNoise_Gain l Gain t "Determines how much the amplitude (brightness) decreases with each octave. Lower values make the fine details subtler." T WorleyNoise0.WorleyNoise_Gain}
+ addUserKnob {41 WorleyNoise_Gamma l Gamma t "Adjusts the mid-tone contrast of the noise. Values < 1.0 brighten the mid-tones; values > 1.0 darken them, making the noise appear sharper." T WorleyNoise0.WorleyNoise_Gamma}
+ addUserKnob {6 Invert +STARTLINE}
+ Invert true
+ addUserKnob {26 "" +STARTLINE}
+ addUserKnob {26 Author l "" +STARTLINE T "<span style=\"color:#666\"><br/><b>WorleyNoise</b> - <a href=\"http://\" style=\"color:#666;text-decoration: none;\">Lukas-Kelloniemi</a>, 2025</span>"}
+ addUserKnob {20 Shapeing}
+ addUserKnob {41 WorleyNoise_EdgeWidth l "Edge Width" t "Controls the softness of the cell borders. (Only active when Noise Type is set to 'Soft Borders')." T "WorleyNoise0.WorleyNoise_Edge Width"}
+ addUserKnob {41 WorleyNoise_Smoothness l Smoothness t "Controls the blending radius between cells, creating a 'Metaball' organic fusion effect. (Only active when Return Type is set to 'Smooth Min' or 'Voro-Noise')." T WorleyNoise0.WorleyNoise_Smoothness}
+ addUserKnob {41 WorleyNoise_RemapBlack l "Remap Black" t "Sets the black point. Noise values equal to or lower than this will become 0." T "WorleyNoise0.WorleyNoise_Remap Black"}
+ addUserKnob {41 WorleyNoise_RemapWhite l "Remap White" t "Sets the white point. Noise values equal to or higher than this will become 1." T "WorleyNoise0.WorleyNoise_Remap White"}
+ addUserKnob {41 WorleyNoise_NormalizeFractalSum l "Normalize Fractal Sum" t "If enabled, ensures the sum of all fractal layers is divided by the total amplitude, keeping values within the 0-1 range. Useful to prevent white clipping when using high Octaves." T "WorleyNoise0.WorleyNoise_Normalize Fractal Sum"}
+ addUserKnob {20 Warping}
+ addUserKnob {41 WorleyNoise_WarpAmount l "Warp Amount" t "Applies domain distortion to the coordinates before generating the noise. Creates a fluid, marbled, or melted look." T "WorleyNoise0.WorleyNoise_Warp Amount"}
+ addUserKnob {41 WorleyNoise_WarpOctaves l "Warp Octaves" t "Controls the complexity and detail of the distortion pattern itself.\n\n" T "WorleyNoise0.WorleyNoise_Warp Octaves"}
+ addUserKnob {41 WorleyNoise_WarpFrequency l "Warp Frequency" t "Controls the scale/tightness of the distortion pattern. Higher values create tighter, more turbulent swirls." T "WorleyNoise0.WorleyNoise_Warp Frequency"}
+ addUserKnob {20 Output}
+ addUserKnob {20 ProgramGroup l "Kernel Source: WorleyNoise" n 2}
+ ProgramGroup 1
+ addUserKnob {41 WorleyNoise_OutputNormals l "Output Normals" t "If enabled, the node outputs an RGB Normal Map (tangent space) instead of a Grayscale Height Map. Useful for relighting or bump mapping" T "WorleyNoise0.WorleyNoise_Output Normals"}
+ addUserKnob {41 WorleyNoise_NormalScale l "Normal Scale" t "Controls the intensity (steepness) of the generated normal map. Higher values make the surface look rougher and deeper." T "WorleyNoise0.WorleyNoise_Normal Scale"}
+ addUserKnob {41 WorleyNoise_OutputtoAlpha l "Output to Alpha" t "If enabled, the generated noise is copied into the Alpha channel. If disabled, the original input Alpha is preserved." T "WorleyNoise0.WorleyNoise_Output to Alpha"}
 }
- Input {
-  inputs 0
-  name Input1
-  xpos -388
-  ypos 47
- }
  Constant {
   inputs 0
   channels rgb
   format "1920 1080 0 0 1920 1080 1 HD_1080"
-  name Constant1
-  xpos -4
-  ypos -214
- }
- Switch {
-  inputs 2
-  which {{parent.UseInput}}
-  name Switch1
-  xpos 0
-  ypos 47
+  name Constant6
+  xpos -267
+  ypos -483
  }
  BlinkScript {
-  recompileCount 11
+  recompileCount 17
   ProgramGroup 1
-  KernelDescription "3 \"WorleyNoise\" iterate componentWise fabf4eb1c209beebbc9cea4e6a30b39f29afa3ad423e61fe3b6ae862e9cf8728 2 \"src\" Read Point \"dst\" Write Point 14 \"Amount\" Float 1 AACAPw== \"Scale\" Float 1 AAAAQQ== \"X Move\" Float 1 AAAAAA== \"Y Move\" Float 1 AAAAAA== \"Z Move\" Float 1 AAAAAA== \"Pixel Size\" Int 1 AQAAAA== \"Distance Type\" Int 1 AAAAAA== \"Return Type\" Int 1 AAAAAA== \"Octaves\" Int 1 AQAAAA== \"Edge Width\" Float 1 j8L1PQ== \"Smoothness\" Float 1 AAAAQA== \"Lacunarity\" Float 1 AAAAQA== \"Gain\" Float 1 AAAAPw== \"Gamma\" Float 1 AACAPw== 14 \"amount\" 1 1 Default \"scale\" 1 1 Default \"xmove\" 1 1 Default \"ymove\" 1 1 Default \"zmove\" 1 1 Default \"pixelSize\" 1 1 Default \"distanceType\" 1 1 Default \"returnType\" 1 1 Default \"octaves\" 1 1 Default \"edgeWidth\" 1 1 Default \"smoothness\" 1 1 Default \"lacunarity\" 1 1 Default \"gain\" 1 1 Default \"gamma\" 1 1 Default 0"
-  kernelSource "kernel WorleyNoise : ImageComputationKernel<eComponentWise> \{\n  Image<eRead, eAccessPoint> src;\n  Image<eWrite, eAccessPoint> dst;\n\n  param:\n    float amount;\n    float scale;\n    float xmove;\n    float ymove;\n    float zmove;\n    int pixelSize;\n    int distanceType;\n    int returnType;\n    int octaves;\n    float edgeWidth;\n    float smoothness;\n    float lacunarity; \n    float gain;       \n    float gamma;      \n\n  local:\n    void define() \{\n      defineParam(amount, \"Amount\", 1.0f);\n      defineParam(scale, \"Scale\", 8.0f);\n      defineParam(xmove, \"X Move\", 0.0f);\n      defineParam(ymove, \"Y Move\", 0.0f);\n      defineParam(zmove, \"Z Move\", 0.0f);\n      defineParam(pixelSize, \"Pixel Size\", 1);\n      defineParam(distanceType, \"Distance Type\", 0);\n      defineParam(returnType, \"Return Type\", 0);\n      defineParam(edgeWidth, \"Edge Width\", 0.12f);\n      defineParam(smoothness, \"Smoothness\", 2.0f);\n      defineParam(octaves, \"Octaves\", 1);\n      defineParam(lacunarity, \"Lacunarity\", 2.0f); \n      defineParam(gain, \"Gain\", 0.5f);             \n      defineParam(gamma, \"Gamma\", 1.0f);           \n    \}\n\n    void init() \{ \}\n\n    float fract(float x) \{\n      return x - floor(x);\n    \}\n    float3 fract(float3 p) \{\n      return float3(fract(p.x), fract(p.y), fract(p.z));\n    \}\n    float smoothstep(float edge0, float edge1, float x) \{\n      float t = clamp((x - edge0) / (edge1 - edge0), 0.0f, 1.0f);\n      return t * t * (3.0f - 2.0f * t);\n    \}\n    float hash(float3 p) \{\n      p = fract(p * float3(0.1031f, 0.1030f, 0.0973f));\n      p += dot(p, float3(p.y, p.z, p.x) + 33.33f);\n      return fract((p.x + p.y) * p.z);\n    \}\n    float3 hash3(float3 p) \{\n      float3 q = float3(\n        dot(p, float3(127.1f, 311.7f, 74.7f)),\n        dot(p, float3(269.5f, 183.3f, 246.1f)),\n        dot(p, float3(113.5f, 271.9f, 124.6f))\n      );\n      return fract(sin(q) * 43758.5453f);\n    \}\n    float distance(float3 a, float3 b, int type) \{\n      float3 d = b - a;\n      if (type == 0) return sqrt(d.x * d.x + d.y * d.y + d.z * d.z);\n      else if (type == 1) return fabs(d.x) + fabs(d.y) + fabs(d.z);\n      else return max(max(fabs(d.x), fabs(d.y)), fabs(d.z));\n    \}\n    float worleyNoise(float3 p) \{\n      float3 cell = floor(p);\n      float3 frac_p = p - cell;\n      float minDist1 = 10.0f;\n      float minDist2 = 10.0f;\n      float minDist3 = 10.0f;\n      float minDist4 = 10.0f;\n\n      for (int z = -1; z <= 1; z++) \{\n        for (int y = -1; y <= 1; y++) \{\n          for (int x = -1; x <= 1; x++) \{\n            float3 neighbor = float3(x, y, z);\n            float3 neighborCell = cell + neighbor;\n            float3 point = hash3(neighborCell);\n            float3 diff = neighbor + point - frac_p;\n            float dist = distance(float3(0.0f, 0.0f, 0.0f), diff, distanceType);\n\n            if (dist < minDist1) \{\n              minDist4 = minDist3;\n              minDist3 = minDist2;\n              minDist2 = minDist1;\n              minDist1 = dist;\n            \}\n            else if (dist < minDist2) \{\n              minDist4 = minDist3;\n              minDist3 = minDist2;\n              minDist2 = dist;\n            \}\n            else if (dist < minDist3) \{\n              minDist4 = minDist3;\n              minDist3 = dist;\n            \}\n            else if (dist < minDist4) \{\n              minDist4 = dist;\n            \}\n          \}\n        \}\n      \}\n\n      if (returnType == 0) return minDist1;                 // F1\n      else if (returnType == 1) return minDist2;            // F2\n      else if (returnType == 2) return minDist2 - minDist1; // F2-F1 (edges)\n      else if (returnType == 3) return minDist1 + minDist2; // F1+F2\n      else if (returnType == 4) \{ // Glowing (fluid)\n        float edge = minDist2 - minDist1;\n        float glow = 1.0f - smoothstep(0.0f, edgeWidth, edge);\n        glow = clamp(glow, 0.0f, 1.0f);\n        float normSmooth = max(smoothness, 0.01f);\n        return pow(glow, 1.0f / normSmooth);\n      \}\n      else if (returnType == 5) return minDist2 * minDist1; // Crackle pattern\n      else if (returnType == 6) return minDist3 - minDist1; // F3 - F1\n      else if (returnType == 7) return minDist4 - minDist1; // F4 - F1\n      else return minDist1;                                 // Default to F1\n    \}\n    // Fractal Worley with lacunarity & gain\n    float fractalWorley(float3 p, int octs) \{\n      float result = 0.0f;\n      float amplitude = 1.0f;\n      float frequency = 1.0f;\n      float totalAmp = 0.0f;\n      for (int i = 0; i < octs; i++) \{\n        result += worleyNoise(p * frequency) * amplitude;\n        totalAmp += amplitude;\n        amplitude *= gain;         \n        frequency *= lacunarity;   \n      \}\n      return result / totalAmp;\n    \}\n\n    void process(int3 pos) \{\n      int px = (pos.x / pixelSize) * pixelSize;\n      int py = (pos.y / pixelSize) * pixelSize;\n      float3 p = float3(px + xmove, py + ymove, zmove) * scale * 0.1f;\n\n      float noise;\n      if (octaves > 1)\n        noise = fractalWorley(p, octaves);\n      else\n        noise = worleyNoise(p);\n\n      noise = clamp(noise, 0.0f, 1.0f);\n\n      // Gamma-correct the output\n      noise = pow(noise, 1.0f / max(gamma, 0.01f));\n\n      float value = src();\n      dst() = value + noise * amount;\n    \}\n\};\n"
+  KernelDescription "3 \"WorleyNoise\" iterate pixelWise 5349218c7662da1d1e8006ebc1b4ad52a41c628832a203151488839d7eeb1953 2 \"src\" Read Random \"dst\" Write Point 23 \"Amount\" Float 1 AACAPw== \"Scale\" Float 1 AACgQA== \"Translate\" Float 3 AAAAAAAAAAAAAAAAAAAAAA== \"Rotation\" Float 1 AAAAAA== \"Jitter\" Float 1 AACAPw== \"Pixel Size\" Int 1 AQAAAA== \"Distance Type\" Int 1 AAAAAA== \"Return Type\" Int 1 AAAAAA== \"Warp Amount\" Float 1 AAAAAA== \"Warp Frequency\" Float 1 AAAAQA== \"Warp Octaves\" Int 1 AAAAAA== \"Octaves\" Int 1 AQAAAA== \"Lacunarity\" Float 1 AAAAQA== \"Gain\" Float 1 AAAAPw== \"Edge Width\" Float 1 j8L1PQ== \"Smoothness\" Float 1 AAAAQA== \"Gamma\" Float 1 AACAPw== \"Normalize Fractal Sum\" Bool 1 AA== \"Remap Black\" Float 1 AAAAAA== \"Remap White\" Float 1 AACAPw== \"Output to Alpha\" Bool 1 AQ== \"Output Normals\" Bool 1 AA== \"Normal Scale\" Float 1 AACAPw== 23 \"amount\" 1 1 Default \"scale\" 1 1 Default \"translate\" 3 1 Default \"rotation\" 1 1 Default \"jitter\" 1 1 Default \"pixelSize\" 1 1 Default \"distanceType\" 1 1 Default \"returnType\" 1 1 Default \"warpAmount\" 1 1 Default \"warpFreq\" 1 1 Default \"warpOctaves\" 1 1 Default \"octaves\" 1 1 Default \"lacunarity\" 1 1 Default \"gain\" 1 1 Default \"edgeWidth\" 1 1 Default \"smoothness\" 1 1 Default \"gamma\" 1 1 Default \"normalizeFractal\" 1 1 Default \"outputBlack\" 1 1 Default \"outputWhite\" 1 1 Default \"replaceAlpha\" 1 1 Default \"outputNormals\" 1 1 Default \"normalScale\" 1 1 Default 0"
+  EncodedSource "1 11419 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"
   rebuild ""
-  WorleyNoise_Amount {{parent.Ammount}}
-  WorleyNoise_Scale {{parent.Scale}}
-  "WorleyNoise_X Move" {{parent.XMove}}
-  "WorleyNoise_Y Move" {{parent.YMove}}
-  "WorleyNoise_Z Move" {{parent.ZMove}}
-  "WorleyNoise_Pixel Size" {{parent.PixelSize}}
+  WorleyNoise_Scale 9.35
+  WorleyNoise_Translate {0 29 {frame}}
   "WorleyNoise_Distance Type" {{parent.DistanceType}}
   "WorleyNoise_Return Type" {{parent.NoiseType}}
-  WorleyNoise_Octaves {{parent.Octaves}}
-  "WorleyNoise_Edge Width" {{parent.EdgeWidth}}
-  WorleyNoise_Smoothness {{parent.Smoothness}}
-  WorleyNoise_Lacunarity {{parent.Lacunarity}}
-  WorleyNoise_Gain {{parent.Gain}}
-  WorleyNoise_Gamma {{parent.Gamma}}
+  "WorleyNoise_Warp Frequency" 1.925
+  WorleyNoise_Lacunarity 1.775
+  WorleyNoise_Gain 0.44
+  "WorleyNoise_Edge Width" 0.268
+  WorleyNoise_Smoothness 0.66
+  "WorleyNoise_Normal Scale" 12.456
   rebuild_finalise ""
-  name BlinkScript1
-  xpos 0
-  ypos 106
+  name WorleyNoise0
+  xpos -267
+  ypos -351
  }
- Clamp {
-  channels alpha
-  name Clamp1
-  xpos 0
-  ypos 144
- }
- Shuffle2 {
-  fromInput1 {
-   {0}
-   B
-  }
-  fromInput2 {
-   {0}
-   B
-  }
-  mappings "4 rgba.red 0 0 rgba.red 0 0 rgba.green 0 1 rgba.green 0 1 rgba.blue 0 2 rgba.blue 0 2 rgba.red 0 0 rgba.alpha 0 3"
-  name Shuffle1
-  xpos 0
-  ypos 233
+ Invert {
+  mix {{parent.Invert}}
+  name Invert1
+  xpos -267
+  ypos -297
  }
  Output {
   name Output1
-  xpos 0
-  ypos 308
+  xpos -267
+  ypos -233
  }
 end_group
